@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тренажер умножения и деления</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: background 0.3s ease;
+        }
+
+        body[data-theme="dark"] {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        body[data-theme="dark"] .container {
+            background: #1f2937;
+            color: #f3f4f6;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            margin-top: 20px;
+            font-size: 2em;
+            transition: color 0.3s ease;
+        }
+
+        body[data-theme="dark"] h1 {
+            color: #f3f4f6;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            color: #555;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            transition: color 0.3s ease;
+        }
+
+        body[data-theme="dark"] label {
+            color: #d1d5db;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .radio-label, .checkbox-label {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        body[data-theme="dark"] .radio-label,
+        body[data-theme="dark"] .checkbox-label {
+            background: #374151;
+            color: #f3f4f6;
+        }
+
+        .radio-label:hover, .checkbox-label:hover {
+            background: #e9ecef;
+            border-color: #667eea;
+        }
+
+        body[data-theme="dark"] .radio-label:hover,
+        body[data-theme="dark"] .checkbox-label:hover {
+            background: #4b5563;
+        }
+
+        .radio-label input, .checkbox-label input {
+            margin-right: 12px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .radio-label span, .checkbox-label span {
+            color: #333;
+            font-size: 1em;
+        }
+
+        body[data-theme="dark"] .radio-label span,
+        body[data-theme="dark"] .checkbox-label span {
+            color: #f3f4f6;
+        }
+
+        select, input[type="number"] {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 1.1em;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        body[data-theme="dark"] select,
+        body[data-theme="dark"] input[type="number"] {
+            background: #374151;
+            border-color: #4b5563;
+            color: #f3f4f6;
+        }
+
+        select:focus, input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            margin: 5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            margin-top: 15px;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        body[data-theme="dark"] .stats {
+            background: #374151;
+        }
+
+        .stat {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #333;
+        }
+
+        body[data-theme="dark"] .stat {
+            color: #f3f4f6;
+        }
+
+        .error-alert {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .error-alert p {
+            color: #721c24;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .completion-alert {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border: 2px solid #28a745;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            animation: celebrate 0.5s ease-in-out;
+        }
+
+        .completion-alert h2 {
+            color: #155724;
+            margin-bottom: 15px;
+            font-size: 2em;
+        }
+
+        .completion-alert p {
+            color: #155724;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .problem-container {
+            margin: 30px 0;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+        }
+
+        .problem {
+            color: white;
+            font-size: 2.5em;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.5em;
+            text-align: center;
+            border: 3px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        body[data-theme="dark"] .answer-input {
+            background: #374151;
+            border-color: #4b5563;
+            color: #f3f4f6;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .quiz-option {
+            padding: 20px;
+            font-size: 1.8em;
+            font-weight: 700;
+            border: 3px solid #ddd;
+            border-radius: 15px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #333;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body[data-theme="dark"] .quiz-option {
+            background: #374151;
+            border-color: #4b5563;
+            color: #f3f4f6;
+        }
+
+        .quiz-option:hover {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: 3px solid white;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            transition: all 0.3s ease;
+            z-index: 99999;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @keyframes celebrate {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 1.5em;
+            }
+            .problem {
+                font-size: 1.8em;
+            }
+            .quiz-option {
+                font-size: 1.4em;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <button class="theme-toggle" id="themeToggle">🌙</button>
+    
+    <div class="container">
+        <!-- Настройки -->
+        <div id="settings">
+            <h1>🧮 Тренажер умножения и деления</h1>
+            
+            <div class="form-group">
+                <label>Выберите операцию:</label>
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input type="radio" name="operation" value="multiplication" checked>
+                        <span>Умножение (×)</span>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="operation" value="division">
+                        <span>Деление (÷)</span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Выберите режим:</label>
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input type="radio" name="mode" value="random" checked>
+                        <span>Вразнобой (случайные примеры)</span>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="mode" value="specific" id="specificMode">
+                        <span>Конкретное число</span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="form-group hidden" id="numberGroup">
+                <label for="number">Выберите число (1-10):</label>
+                <select name="number" id="number">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="examplesCount">Количество примеров:</label>
+                <input type="number" name="examplesCount" id="examplesCount" value="10" min="1" max="100" required>
+            </div>
+            
+            <div class="form-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="infiniteMode" id="infiniteMode">
+                    <span>Бесконечный режим</span>
+                </label>
+            </div>
+            
+            <div class="form-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="quizMode" id="quizMode">
+                    <span>🎯 Режим "Викторина"</span>
+                </label>
+            </div>
+            
+            <button type="button" class="btn btn-primary" onclick="startTraining()">Начать тренировку</button>
+        </div>
+        
+        <!-- Тренировка -->
+        <div id="training" class="hidden">
+            <div class="stats">
+                <span class="stat">✓ Правильно: <span id="correctCount">0</span></span>
+                <span class="stat">✗ Неправильно: <span id="incorrectCount">0</span></span>
+                <span class="stat">Всего: <span id="totalCount">0</span></span>
+            </div>
+            
+            <div id="errorAlert" class="error-alert hidden">
+                <p>❌ Неправильный ответ! Попробуйте ещё раз.</p>
+            </div>
+            
+            <div id="completionAlert" class="completion-alert hidden">
+                <h2>🎉 Сессия завершена!</h2>
+                <p>Вы решили <span id="finalExamples">0</span> примеров</p>
+                <div style="background: white; border-radius: 10px; padding: 20px; margin: 20px 0;">
+                    <p style="color: #333; font-size: 1.1em; margin: 10px 0;">
+                        Правильных ответов: <strong style="color: #28a745; font-size: 1.3em;" id="finalCorrect">0</strong>
+                    </p>
+                    <p style="color: #333; font-size: 1.1em; margin: 10px 0;">
+                        Неправильных ответов: <strong style="color: #dc3545; font-size: 1.3em;" id="finalIncorrect">0</strong>
+                    </p>
+                    <p style="color: #333; font-size: 1.1em; margin: 10px 0;">
+                        Всего примеров: <strong style="color: #667eea; font-size: 1.3em;" id="finalTotal">0</strong>
+                    </p>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="resetTraining()">Начать новую сессию</button>
+            </div>
+            
+            <div id="problemSection">
+                <div class="problem-container">
+                    <h2 class="problem" id="problem">2 × 3 = ?</h2>
+                </div>
+                
+                <div id="answerSection">
+                    <!-- Обычный режим -->
+                    <div id="normalMode">
+                        <input type="number" id="answerInput" class="answer-input" placeholder="Введите ответ" min="1" max="100">
+                        <button type="button" class="btn btn-primary" onclick="checkAnswer()">Проверить</button>
+                    </div>
+                    
+                    <!-- Режим викторины -->
+                    <div id="quizMode" class="hidden">
+                        <div class="quiz-options" id="quizOptions"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="button" class="btn btn-secondary" onclick="resetTraining()">На главную</button>
+        </div>
+    </div>
+    
+    <script>
+        // Состояние приложения
+        let state = {
+            operation: 'multiplication',
+            mode: 'random',
+            number: null,
+            maxExamples: 10,
+            infiniteMode: false,
+            quizMode: false,
+            correctCount: 0,
+            incorrectCount: 0,
+            totalCount: 0,
+            examplesCount: 0,
+            currentProblem: null,
+            currentAnswer: null,
+            shownProblems: [],
+            mistakes: []
+        };
+
+        // Инициализация темы
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.body.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        }
+
+        function updateThemeIcon(theme) {
+            document.getElementById('themeToggle').textContent = theme === 'light' ? '🌙' : '☀️';
+        }
+
+        // Показать/скрыть выбор числа
+        document.querySelectorAll('input[name="mode"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const numberGroup = document.getElementById('numberGroup');
+                if (this.value === 'specific') {
+                    numberGroup.classList.remove('hidden');
+                } else {
+                    numberGroup.classList.add('hidden');
+                }
+            });
+        });
+
+        // Начать тренировку
+        function startTraining() {
+            state.operation = document.querySelector('input[name="operation"]:checked').value;
+            state.mode = document.querySelector('input[name="mode"]:checked').value;
+            state.number = parseInt(document.getElementById('number').value);
+            state.maxExamples = parseInt(document.getElementById('examplesCount').value);
+            state.infiniteMode = document.getElementById('infiniteMode').checked;
+            state.quizMode = document.getElementById('quizMode').checked;
+            
+            state.correctCount = 0;
+            state.incorrectCount = 0;
+            state.totalCount = 0;
+            state.examplesCount = 0;
+            state.shownProblems = [];
+            state.mistakes = [];
+            
+            document.getElementById('settings').classList.add('hidden');
+            document.getElementById('training').classList.remove('hidden');
+            document.getElementById('completionAlert').classList.add('hidden');
+            document.getElementById('problemSection').classList.remove('hidden');
+            
+            if (state.quizMode) {
+                document.getElementById('normalMode').classList.add('hidden');
+                document.getElementById('quizMode').classList.remove('hidden');
+            } else {
+                document.getElementById('normalMode').classList.remove('hidden');
+                document.getElementById('quizMode').classList.add('hidden');
+            }
+            
+            generateProblem();
+            updateStats();
+        }
+
+        // Генерация примера
+        function generateProblem() {
+            let a, b, problem, answer;
+            
+            if (state.mode === 'specific') {
+                a = state.number;
+                b = Math.floor(Math.random() * 10) + 1;
+            } else {
+                a = Math.floor(Math.random() * 10) + 1;
+                b = Math.floor(Math.random() * 10) + 1;
+            }
+            
+            if (state.operation === 'multiplication') {
+                problem = `${a} × ${b}`;
+                answer = a * b;
+            } else {
+                const dividend = a * b;
+                problem = `${dividend} ÷ ${b}`;
+                answer = a;
+            }
+            
+            state.currentProblem = problem;
+            state.currentAnswer = answer;
+            
+            document.getElementById('problem').textContent = `${problem} = ?`;
+            document.getElementById('errorAlert').classList.add('hidden');
+            
+            if (state.quizMode) {
+                generateQuizOptions(answer);
+            } else {
+                document.getElementById('answerInput').value = '';
+                document.getElementById('answerInput').focus();
+            }
+        }
+
+        // Генерация вариантов для викторины
+        function generateQuizOptions(correctAnswer) {
+            const options = [correctAnswer];
+            
+            while (options.length < 4) {
+                const offset = Math.floor(Math.random() * 11) - 5;
+                if (offset === 0) continue;
+                
+                const incorrect = correctAnswer + offset;
+                if (incorrect > 0 && !options.includes(incorrect)) {
+                    options.push(incorrect);
+                }
+            }
+            
+            // Перемешать
+            for (let i = options.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [options[i], options[j]] = [options[j], options[i]];
+            }
+            
+            const quizOptionsDiv = document.getElementById('quizOptions');
+            quizOptionsDiv.innerHTML = '';
+            
+            options.forEach(option => {
+                const button = document.createElement('button');
+                button.className = 'quiz-option';
+                button.textContent = option;
+                button.onclick = () => checkAnswer(option);
+                quizOptionsDiv.appendChild(button);
+            });
+        }
+
+        // Проверка ответа
+        function checkAnswer(userAnswer = null) {
+            if (userAnswer === null) {
+                userAnswer = parseInt(document.getElementById('answerInput').value);
+            }
+            
+            state.totalCount++;
+            
+            if (userAnswer === state.currentAnswer) {
+                state.correctCount++;
+                state.examplesCount++;
+                
+                // Удалить из ошибок если был
+                const mistakeIndex = state.mistakes.indexOf(state.currentProblem);
+                if (mistakeIndex > -1) {
+                    state.mistakes.splice(mistakeIndex, 1);
+                }
+                
+                // Проверить завершение
+                if (!state.infiniteMode && state.examplesCount >= state.maxExamples) {
+                    showCompletion();
+                    return;
+                }
+                
+                generateProblem();
+            } else {
+                state.incorrectCount++;
+                document.getElementById('errorAlert').classList.remove('hidden');
+                
+                // Добавить в ошибки если нет
+                if (!state.mistakes.includes(state.currentProblem)) {
+                    state.mistakes.push(state.currentProblem);
+                }
+                
+                if (!state.quizMode) {
+                    document.getElementById('answerInput').value = '';
+                    document.getElementById('answerInput').focus();
+                }
+            }
+            
+            updateStats();
+        }
+
+        // Обновить статистику
+        function updateStats() {
+            document.getElementById('correctCount').textContent = state.correctCount;
+            document.getElementById('incorrectCount').textContent = state.incorrectCount;
+            document.getElementById('totalCount').textContent = state.totalCount;
+        }
+
+        // Показать завершение
+        function showCompletion() {
+            document.getElementById('problemSection').classList.add('hidden');
+            document.getElementById('completionAlert').classList.remove('hidden');
+            
+            document.getElementById('finalExamples').textContent = state.examplesCount;
+            document.getElementById('finalCorrect').textContent = state.correctCount;
+            document.getElementById('finalIncorrect').textContent = state.incorrectCount;
+            document.getElementById('finalTotal').textContent = state.totalCount;
+        }
+
+        // Сброс
+        function resetTraining() {
+            document.getElementById('settings').classList.remove('hidden');
+            document.getElementById('training').classList.add('hidden');
+        }
+
+        // Обработка Enter
+        document.getElementById('answerInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+
+        // Инициализация
+        initTheme();
+        document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+    </script>
+</body>
+</html>
