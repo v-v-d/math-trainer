@@ -368,6 +368,71 @@
             box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
         }
 
+        .numeric-keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .keypad-btn {
+            padding: 20px;
+            font-size: 1.8em;
+            font-weight: 700;
+            border: 3px solid #ddd;
+            border-radius: 15px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #333;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        body[data-theme="dark"] .keypad-btn {
+            background: #374151;
+            border-color: #4b5563;
+            color: #f3f4f6;
+        }
+
+        .keypad-btn:hover {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .keypad-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .keypad-btn.clear-btn {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            border-color: #f39c12;
+            color: white;
+        }
+
+        .keypad-btn.clear-btn:hover {
+            background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+            border-color: #e67e22;
+        }
+
+        .keypad-btn.submit-btn {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border-color: #28a745;
+            color: white;
+        }
+
+        .keypad-btn.submit-btn:hover {
+            background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%);
+            border-color: #20c997;
+        }
+
         .quiz-options {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -610,8 +675,23 @@
                 <div id="answerSection">
                     <!-- Обычный режим -->
                     <div id="normalMode">
-                        <input type="number" id="answerInput" class="answer-input" placeholder="Введите ответ" min="1" max="100">
-                        <button type="button" class="btn btn-primary" onclick="checkAnswer()">Проверить</button>
+                        <input type="number" id="answerInput" class="answer-input" placeholder="Введите ответ" min="1" max="100" readonly>
+                        
+                        <!-- Числовая клавиатура -->
+                        <div class="numeric-keypad">
+                            <button class="keypad-btn" onclick="addDigit(1)">1</button>
+                            <button class="keypad-btn" onclick="addDigit(2)">2</button>
+                            <button class="keypad-btn" onclick="addDigit(3)">3</button>
+                            <button class="keypad-btn" onclick="addDigit(4)">4</button>
+                            <button class="keypad-btn" onclick="addDigit(5)">5</button>
+                            <button class="keypad-btn" onclick="addDigit(6)">6</button>
+                            <button class="keypad-btn" onclick="addDigit(7)">7</button>
+                            <button class="keypad-btn" onclick="addDigit(8)">8</button>
+                            <button class="keypad-btn" onclick="addDigit(9)">9</button>
+                            <button class="keypad-btn clear-btn" onclick="clearInput()">⌫</button>
+                            <button class="keypad-btn" onclick="addDigit(0)">0</button>
+                            <button class="keypad-btn submit-btn" onclick="checkAnswer()">✓</button>
+                        </div>
                     </div>
                     
                     <!-- Режим викторины -->
@@ -777,7 +857,6 @@
                 generateQuizOptions(answer);
             } else {
                 document.getElementById('answerInput').value = '';
-                document.getElementById('answerInput').focus();
             }
         }
 
@@ -987,6 +1066,29 @@
             document.getElementById('finalTotal').textContent = state.totalCount;
         }
 
+        // Функции числовой клавиатуры
+        function addDigit(digit) {
+            const input = document.getElementById('answerInput');
+            const currentValue = input.value;
+            
+            // Ограничить длину до 3 цифр (максимум 100)
+            if (currentValue.length < 3) {
+                const newValue = currentValue + digit;
+                input.value = newValue;
+            }
+        }
+
+        function clearInput() {
+            const input = document.getElementById('answerInput');
+            const currentValue = input.value;
+            
+            // Удалить последнюю цифру
+            if (currentValue.length > 0) {
+                const newValue = currentValue.slice(0, -1);
+                input.value = newValue;
+            }
+        }
+
         // Сброс
         function resetTraining() {
             if (gameTimer) {
@@ -994,19 +1096,12 @@
                 gameTimer = null;
             }
             
-            document.getElementById('settings').classList.remove('hidden');
-            document.getElementById('training').classList.add('hidden');
-            document.getElementById('timerDisplay').classList.add('timer-hidden');
+        document.getElementById('settings').classList.remove('hidden');
+        document.getElementById('training').classList.add('hidden');
+        document.getElementById('timerDisplay').classList.add('timer-hidden');
         }
 
-        // Обработка Enter
-        document.getElementById('answerInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                checkAnswer();
-            }
-        });
-
-        // Обработка свайпа для алерта ошибки
+        // Обработка свайпа для алрета ошибки
         const errorAlert = document.getElementById('errorAlert');
         let touchStartX = 0;
         let touchStartY = 0;
