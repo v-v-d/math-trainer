@@ -208,15 +208,80 @@
             background: #f8d7da;
             border: 2px solid #dc3545;
             border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
-            animation: shake 0.5s ease-in-out;
+            padding: 15px 40px 15px 15px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            animation: slideDown 0.3s ease-out;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+            touch-action: pan-y;
+            user-select: none;
+            cursor: grab;
+            transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+        }
+
+        .error-alert.dragging {
+            cursor: grabbing;
+            transition: none;
+        }
+
+        .error-alert.swiped {
+            animation: swipeUp 0.3s ease-out forwards;
         }
 
         .error-alert p {
             color: #721c24;
             font-weight: 600;
             font-size: 1.1em;
+            margin: 0;
+            pointer-events: none;
+        }
+
+        .error-close {
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            background: transparent;
+            border: none;
+            color: #dc3545;
+            font-size: 24px;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            line-height: 1;
+            z-index: 1001;
+            pointer-events: auto !important;
+        }
+
+        .error-close:hover {
+            background: #dc3545;
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes swipeUp {
+            to {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
         }
 
         .completion-alert {
@@ -314,6 +379,25 @@
             box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
         }
 
+        .quiz-option.correct {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+            border-color: #28a745 !important;
+            color: white !important;
+            animation: correctPulse 0.5s ease;
+        }
+
+        .quiz-option.incorrect {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
+            border-color: #dc3545 !important;
+            color: white !important;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes correctPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
         .theme-toggle {
             position: fixed;
             top: 20px;
@@ -367,6 +451,14 @@
             .quiz-option {
                 font-size: 1.4em;
                 padding: 15px;
+            }
+            
+            .theme-toggle {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+                top: 10px;
+                right: 10px;
             }
         }
     </style>
@@ -446,7 +538,7 @@
         </div>
         
         <!-- Тренировка -->
-        <div id="training" class="hidden">
+        <div id="training" class="hidden" style="position: relative;">
             <div class="stats">
                 <span class="stat">✓ Правильно: <span id="correctCount">0</span></span>
                 <span class="stat">✗ Неправильно: <span id="incorrectCount">0</span></span>
@@ -454,7 +546,8 @@
             </div>
             
             <div id="errorAlert" class="error-alert hidden">
-                <p>❌ Неправильный ответ! Попробуйте ещё раз.</p>
+                <p id="errorMessage">❌ Неправильный ответ! Попробуйте ещё раз.</p>
+                <button class="error-close" onclick="closeErrorAndNext()">✕</button>
             </div>
             
             <div id="completionAlert" class="completion-alert hidden">
@@ -515,6 +608,12 @@
             shownProblems: [],
             mistakes: []
         };
+
+        // Таймер для автоматического перехода
+        let errorTimer = null;
+
+        // Флаг блокировки при ошибке
+        let isErrorShowing = false;
 
         // Инициализация темы
         function initTheme() {
@@ -584,6 +683,10 @@
         function generateProblem() {
             let a, b, problem, answer;
             
+            // Сбросить переменные свайпа и флаг ошибки
+            isDragging = false;
+            isErrorShowing = false;
+            
             if (state.mode === 'specific') {
                 a = state.number;
                 b = Math.floor(Math.random() * 10) + 1;
@@ -605,7 +708,11 @@
             state.currentAnswer = answer;
             
             document.getElementById('problem').textContent = `${problem} = ?`;
-            document.getElementById('errorAlert').classList.add('hidden');
+            const errorAlert = document.getElementById('errorAlert');
+            errorAlert.classList.add('hidden');
+            errorAlert.classList.remove('swiped');
+            errorAlert.style.transform = '';
+            errorAlert.style.opacity = '';
             
             if (state.quizMode) {
                 generateQuizOptions(answer);
@@ -642,13 +749,38 @@
                 const button = document.createElement('button');
                 button.className = 'quiz-option';
                 button.textContent = option;
-                button.onclick = () => checkAnswer(option);
+                button.dataset.value = option;
+                button.onclick = () => checkAnswer(option, button);
                 quizOptionsDiv.appendChild(button);
             });
         }
 
+        // Закрыть ошибку и перейти к следующему примеру
+        function closeErrorAndNext(event) {
+            if (event) {
+                event.stopPropagation();
+                event.preventDefault();
+            }
+            if (errorTimer) {
+                clearTimeout(errorTimer);
+                errorTimer = null;
+            }
+            isErrorShowing = false;
+            const errorAlert = document.getElementById('errorAlert');
+            errorAlert.classList.add('hidden');
+            errorAlert.classList.remove('swiped');
+            errorAlert.style.transform = '';
+            errorAlert.style.opacity = '';
+            generateProblem();
+        }
+
         // Проверка ответа
-        function checkAnswer(userAnswer = null) {
+        function checkAnswer(userAnswer = null, clickedButton = null) {
+            // Если показан алрет ошибки, блокируем выбор ответа
+            if (isErrorShowing) {
+                return;
+            }
+            
             if (userAnswer === null) {
                 userAnswer = parseInt(document.getElementById('answerInput').value);
             }
@@ -658,6 +790,16 @@
             if (userAnswer === state.currentAnswer) {
                 state.correctCount++;
                 state.examplesCount++;
+                
+                // Если режим викторины и нажата кнопка, подсветить её зеленым
+                if (state.quizMode && clickedButton) {
+                    clickedButton.classList.add('correct');
+                    // Через 0.5 сек перейти к следующему примеру
+                    setTimeout(() => {
+                        generateProblem();
+                    }, 500);
+                    return;
+                }
                 
                 // Удалить из ошибок если был
                 const mistakeIndex = state.mistakes.indexOf(state.currentProblem);
@@ -674,6 +816,32 @@
                 generateProblem();
             } else {
                 state.incorrectCount++;
+                
+                // Если режим викторины и нажата кнопка, подсветить её красным
+                if (state.quizMode && clickedButton) {
+                    clickedButton.classList.add('incorrect');
+                    
+                    // Найти и подсветить правильную кнопку
+                    const allButtons = document.querySelectorAll('.quiz-option');
+                    allButtons.forEach(btn => {
+                        if (parseInt(btn.dataset.value) === state.currentAnswer) {
+                            btn.classList.add('correct');
+                        }
+                    });
+                    
+                    // Через 1.5 сек перейти к следующему примеру
+                    setTimeout(() => {
+                        generateProblem();
+                    }, 1500);
+                    return;
+                }
+                
+                // Установить флаг блокировки
+                isErrorShowing = true;
+                
+                // Показать правильный ответ
+                document.getElementById('errorMessage').innerHTML = 
+                    `❌ Правильный ответ: <strong>${state.currentAnswer}</strong>`;
                 document.getElementById('errorAlert').classList.remove('hidden');
                 
                 // Добавить в ошибки если нет
@@ -681,10 +849,17 @@
                     state.mistakes.push(state.currentProblem);
                 }
                 
-                if (!state.quizMode) {
-                    document.getElementById('answerInput').value = '';
-                    document.getElementById('answerInput').focus();
+                // Очистить предыдущий таймер если есть
+                if (errorTimer) {
+                    clearTimeout(errorTimer);
                 }
+                
+                // Показать ошибку на 3 секунды, затем перейти к следующему примеру
+                errorTimer = setTimeout(() => {
+                    isErrorShowing = false;
+                    document.getElementById('errorAlert').classList.add('hidden');
+                    generateProblem();
+                }, 3000);
             }
             
             updateStats();
@@ -720,6 +895,127 @@
                 checkAnswer();
             }
         });
+
+        // Обработка свайпа для алерта ошибки
+        const errorAlert = document.getElementById('errorAlert');
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchCurrentX = 0;
+        let touchCurrentY = 0;
+        let isDragging = false;
+        const swipeThreshold = 100; // Порог для свайпа
+
+        // Touch события
+        errorAlert.addEventListener('touchstart', function(e) {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            touchCurrentX = touchStartX;
+            touchCurrentY = touchStartY;
+            lastTouchStartTime = Date.now();
+            isDragging = true;
+            errorAlert.classList.add('dragging');
+            errorAlert.classList.remove('swiped');
+        }, { passive: true });
+
+        errorAlert.addEventListener('touchmove', function(e) {
+            if (!isDragging) return;
+            touchCurrentX = e.touches[0].clientX;
+            touchCurrentY = e.touches[0].clientY;
+            const diff = touchCurrentY - touchStartY;
+            
+            // Только свайп вверх
+            if (diff < 0) {
+                errorAlert.style.transform = `translateY(${diff}px)`;
+                errorAlert.style.opacity = 1 - Math.abs(diff) / 200;
+            }
+        }, { passive: true });
+
+        errorAlert.addEventListener('touchend', function(e) {
+            if (!isDragging) return;
+            isDragging = false;
+            errorAlert.classList.remove('dragging');
+            
+            const diffY = touchStartY - touchCurrentY;
+            const diffX = Math.abs(touchStartX - touchCurrentX);
+            
+            // Если свайп вверх больше порога и нет горизонтального движения, закрываем
+            if (diffY > swipeThreshold && diffX < 50) {
+                errorAlert.classList.add('swiped');
+                setTimeout(() => {
+                    closeErrorAndNext();
+                }, 300);
+                return;
+            } else {
+                // Если это простой клик, закрываем
+                const timeDiff = Date.now() - lastTouchStartTime;
+                if (timeDiff < 300 && diffY < 10 && diffX < 10) {
+                    closeErrorAndNext();
+                    return;
+                }
+            }
+            
+            // Возвращаем на место
+            errorAlert.style.transform = 'translateY(0)';
+            errorAlert.style.opacity = 1;
+        });
+
+        // Mouse события (для десктопа)
+        errorAlert.addEventListener('mousedown', function(e) {
+            touchStartX = e.clientX;
+            touchStartY = e.clientY;
+            touchCurrentX = touchStartX;
+            touchCurrentY = touchStartY;
+            isDragging = true;
+            lastMouseStartTime = Date.now();
+            errorAlert.classList.add('dragging');
+            errorAlert.classList.remove('swiped');
+        });
+
+        document.addEventListener('mousemove', function(e) {
+            if (!isDragging) return;
+            touchCurrentX = e.clientX;
+            touchCurrentY = e.clientY;
+            const diff = touchCurrentY - touchStartY;
+            
+            // Только свайп вверх
+            if (diff < 0) {
+                errorAlert.style.transform = `translateY(${diff}px)`;
+                errorAlert.style.opacity = 1 - Math.abs(diff) / 200;
+            }
+        });
+
+        document.addEventListener('mouseup', function(e) {
+            if (!isDragging) return;
+            isDragging = false;
+            errorAlert.classList.remove('dragging');
+            
+            const diffY = touchStartY - touchCurrentY;
+            const diffX = Math.abs(touchStartX - touchCurrentX);
+            
+            // Если свайп вверх больше порога и нет горизонтального движения, закрываем
+            if (diffY > swipeThreshold && diffX < 50) {
+                errorAlert.classList.add('swiped');
+                setTimeout(() => {
+                    closeErrorAndNext();
+                }, 300);
+                return;
+            } else {
+                // Если это простой клик, закрываем
+                const timeDiff = Date.now() - lastMouseStartTime;
+                if (timeDiff < 300 && diffY < 10 && diffX < 10) {
+                    closeErrorAndNext();
+                    return;
+                }
+            }
+            
+            // Возвращаем на место
+            errorAlert.style.transform = 'translateY(0)';
+            errorAlert.style.opacity = 1;
+        });
+
+        // Переменные для отслеживания времени
+        let lastTouchStartTime = 0;
+        let lastMouseStartTime = 0;
 
         // Инициализация
         initTheme();
