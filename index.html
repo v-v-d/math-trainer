@@ -702,6 +702,154 @@
             border-color: #20c997;
         }
 
+        .voice-btn {
+            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+            border-color: #9b59b6;
+            color: white;
+            position: relative;
+        }
+
+        .voice-btn:hover {
+            background: linear-gradient(135deg, #8e44ad 0%, #7d3c98 100%);
+            border-color: #8e44ad;
+        }
+
+        .voice-btn.listening {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            border-color: #e74c3c;
+            animation: pulse 1.5s infinite;
+            box-shadow: 0 0 20px rgba(231, 76, 60, 0.6);
+            position: relative;
+            overflow: visible;
+        }
+
+        .wave-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .wave {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            border: 3px solid rgba(231, 76, 60, 0.6);
+            animation: wave-expand 1s ease-out infinite;
+        }
+
+        .wave:nth-child(1) { animation-delay: 0s; }
+        .wave:nth-child(2) { animation-delay: 0.2s; }
+        .wave:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes wave-expand {
+            0% {
+                width: 100%;
+                height: 100%;
+                opacity: 1;
+            }
+            100% {
+                width: 200%;
+                height: 200%;
+                opacity: 0;
+            }
+        }
+
+        .voice-btn.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .answer-input.listening {
+            border-color: #e74c3c;
+            box-shadow: 0 0 15px rgba(231, 76, 60, 0.4);
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe3e3 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        body[data-theme="dark"] .answer-input.listening {
+            border-color: #e74c3c;
+            background: linear-gradient(135deg, #2d1818 0%, #3d1f1f 100%);
+        }
+
+        .audio-wave {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        .audio-wave-bar {
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(180deg, #e74c3c 0%, #c0392b 100%);
+            border-radius: 2px;
+            animation: audioWave 0.8s ease-in-out infinite;
+        }
+
+        .audio-wave-bar:nth-child(1) { animation-delay: 0s; }
+        .audio-wave-bar:nth-child(2) { animation-delay: 0.1s; }
+        .audio-wave-bar:nth-child(3) { animation-delay: 0.2s; }
+        .audio-wave-bar:nth-child(4) { animation-delay: 0.3s; }
+        .audio-wave-bar:nth-child(5) { animation-delay: 0.4s; }
+        .audio-wave-bar:nth-child(6) { animation-delay: 0.3s; }
+        .audio-wave-bar:nth-child(7) { animation-delay: 0.2s; }
+        .audio-wave-bar:nth-child(8) { animation-delay: 0.1s; }
+        .audio-wave-bar:nth-child(9) { animation-delay: 0s; }
+
+        body[data-theme="dark"] .audio-wave-bar {
+            background: linear-gradient(180deg, #e74c3c 0%, #c0392b 100%);
+        }
+
+        @keyframes audioWave {
+            0%, 100% {
+                height: 10px;
+                opacity: 0.5;
+            }
+            50% {
+                height: 40px;
+                opacity: 1;
+            }
+        }
+
+        .listening-indicator {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: 600;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .listening-indicator.visible {
+            opacity: 1;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-5px); }
+        }
+
         .quiz-options {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -1112,8 +1260,19 @@
 
             <div id="answerSection">
                 <!-- Обычный режим -->
-                <div id="normalMode">
+                <div id="normalMode" style="position: relative;">
                     <input type="number" id="answerInput" class="answer-input" placeholder="Введите ответ" min="1" max="100" readonly>
+                    <div class="audio-wave hidden" id="audioWave">
+                        <div class="audio-wave-bar"></div>
+                        <div class="audio-wave-bar"></div>
+                        <div class="audio-wave-bar"></div>
+                        <div class="audio-wave-bar"></div>
+                        <div class="audio-wave-bar"></div>
+                        <div class="audio-wave-bar"></div>
+                        <div class="audio-wave-bar"></div>
+                        <div class="audio-wave-bar"></div>
+                        <div class="audio-wave-bar"></div>
+                    </div>
 
                     <!-- Числовая клавиатура -->
                     <div class="numeric-keypad">
@@ -1128,7 +1287,14 @@
                         <button class="keypad-btn" onclick="addDigit(9)">9</button>
                         <button class="keypad-btn clear-btn" onclick="clearInput()">⌫</button>
                         <button class="keypad-btn" onclick="addDigit(0)">0</button>
-                        <button class="keypad-btn submit-btn" onclick="checkAnswer()">✓</button>
+                        <button class="keypad-btn voice-btn" id="voiceBtn" 
+                                onmousedown="startVoiceHold()" 
+                                onmouseup="stopVoiceHold()" 
+                                onmouseleave="stopVoiceHold()"
+                                ontouchstart="startVoiceHold()" 
+                                ontouchend="stopVoiceHold()">🎤
+                            <div class="wave-container" id="waveContainer"></div>
+                        </button>
                     </div>
                 </div>
 
@@ -1392,6 +1558,7 @@
             generateQuizOptions(answer);
         } else {
             document.getElementById('answerInput').value = '';
+            updateVoiceSubmitButton(false); // Сбрасываем кнопку на микрофон
         }
     }
 
@@ -1537,6 +1704,12 @@
             }, 3000);
         }
 
+        // Правильный ответ в режиме с клавиатурой - очищаем поле ввода
+        if (!state.quizMode && clickedButton === null && userAnswer === state.currentAnswer) {
+            document.getElementById('answerInput').value = '';
+            updateVoiceSubmitButton(false);
+        }
+
         updateStats();
     }
 
@@ -1608,10 +1781,21 @@
         const input = document.getElementById('answerInput');
         const currentValue = input.value;
 
+        // Если в режиме прослушивания, останавливаем его
+        if (isListening && recognition) {
+            try {
+                recognition.stop();
+            } catch (error) {
+                console.error('Ошибка остановки распознавания:', error);
+            }
+        }
+
         // Ограничить длину до 3 цифр (максимум 100)
         if (currentValue.length < 3) {
             const newValue = currentValue + digit;
             input.value = newValue;
+            // Заменяем микрофон на кнопку отправки
+            updateVoiceSubmitButton(true);
         }
     }
 
@@ -1619,10 +1803,54 @@
         const input = document.getElementById('answerInput');
         const currentValue = input.value;
 
+        // Если в режиме прослушивания, останавливаем его
+        if (isListening && recognition) {
+            try {
+                recognition.stop();
+            } catch (error) {
+                console.error('Ошибка остановки распознавания:', error);
+            }
+        }
+
         // Удалить последнюю цифру
         if (currentValue.length > 0) {
             const newValue = currentValue.slice(0, -1);
             input.value = newValue;
+        }
+
+        // Если поле пустое, возвращаем микрофон
+        if (input.value.length === 0) {
+            updateVoiceSubmitButton(false);
+        }
+    }
+
+    // Обновление кнопки микрофон/отправка
+    function updateVoiceSubmitButton(hasInput) {
+        const voiceBtn = document.getElementById('voiceBtn');
+        if (!voiceBtn) return;
+
+        if (hasInput) {
+            // Показать кнопку отправки
+            voiceBtn.innerHTML = '✓';
+            voiceBtn.onmousedown = null;
+            voiceBtn.onmouseup = null;
+            voiceBtn.onmouseleave = null;
+            voiceBtn.ontouchstart = null;
+            voiceBtn.ontouchend = null;
+            voiceBtn.onclick = checkAnswer;
+            voiceBtn.classList.remove('voice-btn');
+            voiceBtn.classList.add('submit-btn');
+        } else {
+            // Показать кнопку микрофона
+            voiceBtn.innerHTML = '🎤';
+            voiceBtn.onclick = null;
+            voiceBtn.onmousedown = startVoiceHold;
+            voiceBtn.onmouseup = stopVoiceHold;
+            voiceBtn.onmouseleave = stopVoiceHold;
+            voiceBtn.ontouchstart = startVoiceHold;
+            voiceBtn.ontouchend = stopVoiceHold;
+            voiceBtn.classList.remove('submit-btn');
+            voiceBtn.classList.add('voice-btn');
         }
     }
 
@@ -1762,12 +1990,246 @@
     let lastTouchStartTime = 0;
     let lastMouseStartTime = 0;
 
+    // Голосовой ввод (Speech Recognition)
+    let recognition = null;
+    let isListening = false;
+    let voiceBtn = null;
+
+    // Инициализация распознавания речи
+    function initSpeechRecognition() {
+        voiceBtn = document.getElementById('voiceBtn');
+
+        // Проверяем поддержку браузера
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if (!SpeechRecognition) {
+            // Если не поддерживается, скрываем кнопку
+            if (voiceBtn) {
+                voiceBtn.classList.add('disabled');
+                voiceBtn.disabled = true;
+            }
+            console.log('Speech Recognition API не поддерживается этим браузером');
+            return;
+        }
+
+        try {
+            recognition = new SpeechRecognition();
+            recognition.lang = 'ru-RU';
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+        recognition.onstart = function() {
+            isListening = true;
+            // Визуальные эффекты уже добавлены в startVoiceHold
+        };
+
+        recognition.onend = function() {
+            isListening = false;
+
+            // Очищаем волны
+            const waveContainer = document.getElementById('waveContainer');
+            if (waveContainer) {
+                waveContainer.innerHTML = '';
+            }
+
+            // Убираем визуальные эффекты
+            if (voiceBtn) {
+                voiceBtn.classList.remove('listening');
+                voiceBtn.innerHTML = '🎤';
+            }
+
+            // Убираем класс listening с поля ввода
+            const answerInput = document.getElementById('answerInput');
+            if (answerInput) {
+                answerInput.classList.remove('listening');
+            }
+
+            // Если поле пустое, возвращаем микрофон вместо кнопки отправки
+            updateVoiceSubmitButton(answerInput.value.length > 0);
+        };
+
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                const confidence = event.results[0][0].confidence;
+
+                console.log('Распознано:', transcript, 'Уверенность:', confidence);
+
+                // Извлекаем число из текста
+                const number = extractNumberFromText(transcript);
+
+                if (number !== null) {
+                    document.getElementById('answerInput').value = number;
+                    // Сразу проверяем ответ при голосовом вводе
+                    setTimeout(() => {
+                        checkAnswer(number);
+                    }, 100);
+                    console.log('Распознано число:', number, '- проверка ответа');
+                } else {
+                    console.log('Число не найдено в:', transcript);
+                }
+            };
+
+            recognition.onerror = function(event) {
+                console.error('Ошибка распознавания:', event.error);
+
+                isListening = false;
+
+                // Очищаем волны
+                const waveContainer = document.getElementById('waveContainer');
+                if (waveContainer) {
+                    waveContainer.innerHTML = '';
+                }
+
+                // Убираем визуальные эффекты
+                if (voiceBtn) {
+                    voiceBtn.classList.remove('listening');
+                    voiceBtn.innerHTML = '🎤';
+                }
+
+                const answerInput = document.getElementById('answerInput');
+                if (answerInput) {
+                    answerInput.classList.remove('listening');
+                }
+
+                // Показать сообщение об ошибке
+                if (event.error === 'not-allowed') {
+                    alert('Для голосового ввода необходимо разрешить доступ к микрофону');
+                } else if (event.error === 'no-speech') {
+                    console.log('Речь не обнаружена');
+                }
+            };
+
+        } catch (error) {
+            console.error('Ошибка инициализации распознавания речи:', error);
+            if (voiceBtn) {
+                voiceBtn.classList.add('disabled');
+                voiceBtn.disabled = true;
+            }
+        }
+    }
+
+    // Извлечение числа из текста
+    function extractNumberFromText(text) {
+        // Словесные цифры и их числовые значения
+        const wordNumbers = {
+            'ноль': 0, 'один': 1, 'два': 2, 'три': 3, 'четыре': 4, 'пять': 5,
+            'шесть': 6, 'семь': 7, 'восемь': 8, 'девять': 9, 'десять': 10,
+            'одинадцать': 11, 'двенадцать': 12, 'тринадцать': 13, 'четырнадцать': 14,
+            'пятнадцать': 15, 'шестнадцать': 16, 'семнадцать': 17, 'восемнадцать': 18,
+            'девятнадцать': 19, 'двадцать': 20, 'тридцать': 30, 'сорок': 40,
+            'пятьдесят': 50, 'шестьдесят': 60, 'семьдесят': 70, 'восемьдесят': 80,
+            'девяносто': 90, 'сто': 100
+        };
+
+        text = text.toLowerCase().trim();
+
+        // Сначала проверяем, есть ли сразу число в тексте
+        const numberMatch = text.match(/\d+/);
+        if (numberMatch) {
+            const num = parseInt(numberMatch[0]);
+            if (num >= 0 && num <= 100) {
+                return num;
+            }
+        }
+
+        // Проверяем словесные числа
+        for (const [word, value] of Object.entries(wordNumbers)) {
+            if (text.includes(word)) {
+                return value;
+            }
+        }
+
+        // Если ничего не нашли, возвращаем null
+        return null;
+    }
+
+    // Создание волн
+    function createWaves() {
+        const waveContainer = document.getElementById('waveContainer');
+        if (!waveContainer) return;
+
+        // Очищаем предыдущие волны
+        waveContainer.innerHTML = '';
+
+        // Создаём 3 волны
+        for (let i = 0; i < 3; i++) {
+            const wave = document.createElement('div');
+            wave.className = 'wave';
+            waveContainer.appendChild(wave);
+        }
+    }
+
+    // Начать удержание микрофона
+    function startVoiceHold() {
+        if (!recognition) {
+            console.log('Speech Recognition не инициализирован');
+            return;
+        }
+
+        if (isListening) {
+            return; // Уже слушаем
+        }
+
+        // Создаём волны на кнопке
+        createWaves();
+
+        // Добавляем классы для визуальных эффектов
+        if (voiceBtn) {
+            voiceBtn.classList.add('listening');
+            voiceBtn.innerHTML = '🔴';
+        }
+
+        const answerInput = document.getElementById('answerInput');
+        if (answerInput) {
+            answerInput.classList.add('listening');
+            // Очищаем поле для отображения звуковой волны
+            answerInput.value = '';
+        }
+
+        // Показываем звуковую волну в поле ввода
+        const audioWave = document.getElementById('audioWave');
+        if (audioWave) {
+            audioWave.classList.remove('hidden');
+        }
+
+        // Начинаем распознавание
+        try {
+            recognition.start();
+        } catch (error) {
+            console.error('Ошибка запуска распознавания:', error);
+            stopVoiceHold();
+        }
+    }
+
+    // Остановить удержание микрофона
+    function stopVoiceHold() {
+        if (!recognition || !isListening) {
+            return;
+        }
+
+        // Скрываем звуковую волну в поле ввода
+        const audioWave = document.getElementById('audioWave');
+        if (audioWave) {
+            audioWave.classList.add('hidden');
+        }
+
+        try {
+            recognition.stop();
+        } catch (error) {
+            console.error('Ошибка остановки распознавания:', error);
+        }
+    }
+
     // Инициализация
     initTheme();
     document.getElementById('themeToggle').addEventListener('click', toggleTheme);
 
     // Инициализация валидации
     validateOperations();
+
+    // Инициализация распознавания речи
+    initSpeechRecognition();
 </script>
 </body>
 </html>
