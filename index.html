@@ -33,11 +33,11 @@
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             padding: 20px;
             max-width: 500px;
-            width: 100%;
-            max-height: 100vh;
+            width: 90%;
+            max-height: 95vh;
             text-align: center;
             transition: background 0.3s ease, color 0.3s ease;
-            overflow-y: auto;
+            overflow-y: hidden;
             display: flex;
             flex-direction: column;
         }
@@ -800,97 +800,162 @@
             75% { transform: translateX(10px); }
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 480px) and (orientation: portrait) {
             body {
-                padding: 5px;
+                padding: 0;
+                height: 100vh;
+                height: 100dvh;
             }
             .container {
-                padding: 12px;
+                padding: 15px;
+                width: 95%;
+                max-width: none;
                 max-height: 100vh;
+                max-height: 100dvh;
+                border-radius: 0;
+                height: 100vh;
+                height: 100dvh;
             }
             h1 {
+                font-size: 1.5em;
+                margin-bottom: 15px;
+                flex-shrink: 0;
+            }
+            .form-group {
+                margin-bottom: 12px;
+                flex-shrink: 0;
+            }
+            label {
+                font-size: 1.1em;
+                margin-bottom: 6px;
+            }
+            .radio-label, .checkbox-label {
+                padding: 15px 10px;
+                font-size: 1em;
+                gap: 8px;
+            }
+            .radio-label span, .checkbox-label span {
+                font-size: 0.95em;
+            }
+            select, input[type="number"] {
+                padding: 12px 15px;
+                font-size: 1.1em;
+            }
+            .btn {
+                padding: 15px 25px;
+                font-size: 1.1em;
+                margin: 8px;
+            }
+            .btn-start {
+                padding: 18px 35px;
+                font-size: 1.3em;
+            }
+            .stats {
+                padding: 10px;
+                margin-bottom: 12px;
+                font-size: 1em;
+            }
+            .stat {
+                font-size: 1em;
+            }
+            .timer {
+                font-size: 2.2em;
+                margin: 8px 0;
+            }
+            .problem-container {
+                padding: 18px;
+                margin: 12px 0;
+                flex-shrink: 0;
+            }
+            .problem {
+                font-size: 2.2em;
+            }
+            .answer-input {
+                padding: 30px;
+                margin-bottom: 12px;
+                font-size: 1.8em;
+                min-height: 80px;
+            }
+            .numeric-keypad {
+                gap: 8px;
+                margin: 10px 0;
+                flex: 1;
+                min-height: 200px;
+            }
+            .keypad-btn {
+                padding: 15px;
+                font-size: 1.8em;
+                min-height: 60px;
+            }
+            .quiz-options {
+                gap: 10px;
+                margin: 10px 0;
+                flex: 1;
+                min-height: 200px;
+            }
+            .quiz-option {
+                padding: 20px;
+                font-size: 1.8em;
+                min-height: 70px;
+            }
+            .theme-toggle {
+                width: 45px;
+                height: 45px;
+                font-size: 22px;
+                top: 10px;
+                right: 10px;
+            }
+            .completion-alert {
+                padding: 20px;
+                margin: 15px 0;
+            }
+            .completion-alert h2 {
+                font-size: 1.8em;
+            }
+            .completion-alert p {
                 font-size: 1.2em;
-                margin-bottom: 10px;
+            }
+        }
+
+        @media (max-width: 480px) and (orientation: landscape) {
+            body {
+                padding: 0;
+            }
+            .container {
+                width: 95%;
+                max-width: 95%;
+                max-height: 95vh;
+                padding: 10px;
+                overflow-y: auto;
+            }
+            h1 {
+                font-size: 1.3em;
+                margin-bottom: 8px;
             }
             .form-group {
                 margin-bottom: 8px;
             }
-            label {
-                font-size: 0.85em;
-                margin-bottom: 4px;
-            }
             .radio-label, .checkbox-label {
-                padding: 10px 8px;
-                font-size: 0.85em;
-                gap: 5px;
-            }
-            .radio-label span, .checkbox-label span {
-                font-size: 0.8em;
-            }
-            select, input[type="number"] {
-                padding: 6px 10px;
+                padding: 10px 6px;
                 font-size: 0.9em;
-            }
-            .btn {
-                padding: 8px 15px;
-                font-size: 0.9em;
-            }
-            .stats {
-                padding: 6px;
-                margin-bottom: 8px;
-            }
-            .stat {
-                font-size: 0.75em;
-            }
-            .timer {
-                font-size: 1.5em;
-                margin: 5px 0;
-            }
-            .problem-container {
-                padding: 12px;
-                margin: 10px 0;
             }
             .problem {
-                font-size: 1.4em;
+                font-size: 2em;
             }
             .answer-input {
-                padding: 25px;
-                margin-bottom: 10px;
-            }
-            .numeric-keypad {
-                gap: 6px;
-                margin: 8px 0;
+                padding: 20px;
+                font-size: 1.6em;
+                min-height: 60px;
             }
             .keypad-btn {
-                padding: 10px;
-                font-size: 1.2em;
-                min-height: 45px;
-            }
-            .quiz-options {
-                gap: 6px;
-                margin: 8px 0;
-            }
-            .quiz-option {
                 padding: 12px;
-                font-size: 1.2em;
+                font-size: 1.5em;
                 min-height: 50px;
             }
-            .theme-toggle {
-                width: 35px;
-                height: 35px;
-                font-size: 18px;
-                top: 8px;
-                right: 8px;
-            }
-            .completion-alert {
+            .quiz-option {
                 padding: 15px;
-                margin: 10px 0;
-            }
-            .completion-alert h2 {
-                font-size: 1.2em;
-            }
-            .completion-alert p {
-                font-size: 0.9em;
+                font-size: 1.5em;
+                min-height: 55px;
             }
         }
     </style>
