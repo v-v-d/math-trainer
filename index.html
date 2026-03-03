@@ -1401,6 +1401,7 @@
             // Если режим викторины и нажата кнопка, подсветить её зеленым
             if (state.quizMode && clickedButton) {
                 clickedButton.classList.add('correct');
+                updateStats(); // Обновляем статистику
                 // Через 0.5 сек перейти к следующему примеру
                 setTimeout(() => {
                     generateProblem();
@@ -1436,6 +1437,7 @@
                     }
                 });
 
+                updateStats(); // Обновляем статистику
                 // Через 1.5 сек перейти к следующему примеру
                 setTimeout(() => {
                     generateProblem();
