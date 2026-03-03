@@ -97,15 +97,24 @@
             gap: 10px;
         }
 
+        .radio-group-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
         .radio-label, .checkbox-label {
             display: flex;
             align-items: center;
-            padding: 8px 12px;
+            justify-content: center;
+            padding: 12px 15px;
             background: #f8f9fa;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
-            border: 2px solid transparent;
+            border: 2px solid #e0e0e0;
+            font-weight: 500;
+            text-align: center;
         }
 
         body[data-theme="dark"] .radio-label,
@@ -117,18 +126,35 @@
         .radio-label:hover, .checkbox-label:hover {
             background: #e9ecef;
             border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
         }
 
         body[data-theme="dark"] .radio-label:hover,
         body[data-theme="dark"] .checkbox-label:hover {
             background: #4b5563;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .radio-label:has(input:checked), .checkbox-label:has(input:checked) {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: #667eea;
+            color: white;
+        }
+        
+        .radio-label:has(input:checked) span, .checkbox-label:has(input:checked) span {
+            color: white;
+        }
+        
+        body[data-theme="dark"] .radio-label:has(input:checked), 
+        body[data-theme="dark"] .checkbox-label:has(input:checked) {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: #667eea;
+            color: white;
         }
 
         .radio-label input, .checkbox-label input {
-            margin-right: 12px;
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
+            display: none;
         }
 
         .radio-label span, .checkbox-label span {
@@ -165,6 +191,172 @@
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #ddd;
+            outline: none;
+            cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease;
+        }
+
+        input[type="range"]::-moz-range-thumb:hover {
+            transform: scale(1.1);
+        }
+
+        body[data-theme="dark"] input[type="range"] {
+            background: #4b5563;
+        }
+
+        input[type="range"]:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        input[type="range"]:disabled::-webkit-slider-thumb {
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        input[type="range"]:disabled::-moz-range-thumb {
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .form-group.disabled {
+            opacity: 0.4;
+        }
+
+        .form-group.disabled label {
+            color: #999;
+        }
+
+        body[data-theme="dark"] .form-group.disabled label {
+            color: #6b7280;
+        }
+
+        .chips-container {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+            overflow-x: auto;
+            padding: 4px 0;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge */
+        }
+
+        .chips-container::-webkit-scrollbar {
+            display: none; /* Chrome/Safari/Opera */
+        }
+
+        .chip-label {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 10px;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 600;
+            font-size: 13px;
+            user-select: none;
+            flex-shrink: 0;
+            min-width: 32px;
+        }
+
+        body[data-theme="dark"] .chip-label {
+            background: #374151;
+            border-color: #4b5563;
+            color: #f3f4f6;
+        }
+
+        .chip-label:hover:not(.disabled):not(:has(input:checked)) {
+            background: #e9ecef;
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 3px 8px rgba(102, 126, 234, 0.2);
+        }
+
+        body[data-theme="dark"] .chip-label:hover:not(.disabled):not(:has(input:checked)) {
+            background: #4b5563;
+            box-shadow: 0 3px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .chip-label input {
+            display: none;
+        }
+
+        .chip-label span {
+            color: #333;
+        }
+
+        body[data-theme="dark"] .chip-label span {
+            color: #f3f4f6;
+        }
+
+        .chip-label:has(input:checked) {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: #667eea;
+            color: white;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+        }
+
+        .chip-label:has(input:checked) span {
+            color: white;
+        }
+
+        /* Убираем hover эффект для активных чипсов */
+        .chip-label:has(input:checked):hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: #667eea;
+            color: white;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+            transform: scale(1.05);
+        }
+
+        .chip-label.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .chips-container.disabled .chip-label {
+            opacity: 0.3;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
         .btn {
             display: inline-block;
             padding: 10px 20px;
@@ -190,15 +382,55 @@
             box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
         }
 
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-            margin-top: 15px;
+        .btn-start {
+            padding: 16px 30px;
+            font-size: 1.2em;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #764ba2 100%);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
         }
 
-        .btn-secondary:hover {
-            background: #5a6268;
+        .btn-start:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-start:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            font-size: 1em;
+            font-weight: 600;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            margin-top: 15px;
+            background: #f8f9fa;
+            color: #333;
+            gap: 8px;
+        }
+
+        body[data-theme="dark"] .back-button {
+            background: #374151;
+            border-color: #4b5563;
+            color: #f3f4f6;
+        }
+
+        .back-button:hover {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         }
 
         .stats {
@@ -370,13 +602,26 @@
 
         .answer-input {
             width: 100%;
-            padding: 10px;
-            font-size: 1.3em;
+            padding: 35px;
+            font-size: 1.6em;
             text-align: center;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            margin-bottom: 10px;
+            border: 4px solid #ddd;
+            border-radius: 20px;
+            margin-bottom: 15px;
             transition: all 0.3s ease;
+            font-weight: 700;
+            min-height: 70px;
+        }
+
+        /* Убираем стрелки из input type="number" */
+        .answer-input::-webkit-inner-spin-button,
+        .answer-input::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .answer-input {
+            -moz-appearance: textfield;
         }
 
         body[data-theme="dark"] .answer-input {
@@ -542,6 +787,7 @@
             display: none !important;
         }
 
+
         @keyframes celebrate {
             0% { transform: scale(0.8); opacity: 0; }
             50% { transform: scale(1.05); }
@@ -574,10 +820,12 @@
                 margin-bottom: 4px;
             }
             .radio-label, .checkbox-label {
-                padding: 6px 10px;
+                padding: 10px 8px;
+                font-size: 0.85em;
+                gap: 5px;
             }
             .radio-label span, .checkbox-label span {
-                font-size: 0.85em;
+                font-size: 0.8em;
             }
             select, input[type="number"] {
                 padding: 6px 10px;
@@ -606,9 +854,8 @@
                 font-size: 1.4em;
             }
             .answer-input {
-                padding: 8px;
-                font-size: 1.1em;
-                margin-bottom: 8px;
+                padding: 25px;
+                margin-bottom: 10px;
             }
             .numeric-keypad {
                 gap: 6px;
@@ -649,676 +896,810 @@
     </style>
 </head>
 <body data-theme="light">
-    <button class="theme-toggle" id="themeToggle">🌙</button>
-    
-    <div class="container">
-        <!-- Настройки -->
-        <div id="settings">
-            <h1>🧮 Тренажер умножения и деления</h1>
-            
-            <div class="form-group">
-                <label>Выберите операцию:</label>
-                <div class="radio-group">
-                    <label class="radio-label">
-                        <input type="radio" name="operation" value="multiplication" checked>
-                        <span>Умножение (×)</span>
-                    </label>
-                    <label class="radio-label">
-                        <input type="radio" name="operation" value="division">
-                        <span>Деление (÷)</span>
-                    </label>
-                </div>
+<button class="theme-toggle" id="themeToggle">🌙</button>
+
+<div class="container">
+    <!-- Настройки -->
+    <div id="settings">
+        <h1>🧮 Тренажер умножения и деления</h1>
+
+        <div class="form-group">
+            <label>Выберите операцию:</label>
+            <div class="radio-group-grid">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="operation" value="multiplication" checked>
+                    <span>✖️ Умножение</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" name="operation" value="division" checked>
+                    <span>➗ Деление</span>
+                </label>
             </div>
-            
+        </div>
+
             <div class="form-group">
-                <label>Режим генерации примеров:</label>
-                <div class="radio-group">
+                <label>Режим генерации:</label>
+                <div class="radio-group-grid">
                     <label class="radio-label">
                         <input type="radio" name="mode" value="random" checked>
-                        <span>Вразнобой (случайные)</span>
+                        <span>🎲 Случайно</span>
                     </label>
                     <label class="radio-label">
                         <input type="radio" name="mode" value="specific" id="specificMode">
-                        <span>Конкретное число</span>
+                        <span>🔢 Число</span>
                     </label>
                 </div>
             </div>
-            
-            <div class="form-group hidden" id="numberGroup">
-                <label for="number">Выберите число (1-10):</label>
-                <select name="number" id="number">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                </select>
+
+        <div class="form-group" id="numberGroup">
+            <label>Число:</label>
+            <div class="chips-container" id="numberChips">
+                <label class="chip-label">
+                    <input type="radio" name="number" value="1">
+                    <span>1</span>
+                </label>
+                <label class="chip-label">
+                    <input type="radio" name="number" value="2">
+                    <span>2</span>
+                </label>
+                <label class="chip-label">
+                    <input type="radio" name="number" value="3">
+                    <span>3</span>
+                </label>
+                <label class="chip-label">
+                    <input type="radio" name="number" value="4">
+                    <span>4</span>
+                </label>
+                <label class="chip-label">
+                    <input type="radio" name="number" value="5">
+                    <span>5</span>
+                </label>
+                <label class="chip-label">
+                    <input type="radio" name="number" value="6">
+                    <span>6</span>
+                </label>
+                <label class="chip-label">
+                    <input type="radio" name="number" value="7">
+                    <span>7</span>
+                </label>
+                <label class="chip-label">
+                    <input type="radio" name="number" value="8">
+                    <span>8</span>
+                </label>
+                <label class="chip-label">
+                    <input type="radio" name="number" value="9">
+                    <span>9</span>
+                </label>
+                <label class="chip-label">
+                    <input type="radio" name="number" value="10">
+                    <span>10</span>
+                </label>
             </div>
-            
-            <div class="form-group">
-                <label for="examplesCount">Количество примеров:</label>
-                <input type="number" name="examplesCount" id="examplesCount" value="10" min="1" max="100" required>
-            </div>
-            
-            <div class="form-group">
-                <label>Дополнительные режимы:</label>
-                <div class="radio-group">
-                    <label class="checkbox-label">
-                        <input type="checkbox" name="infiniteMode" id="infiniteMode">
-                        <span>♾️ Бесконечный режим</span>
-                    </label>
-                    <label class="checkbox-label">
-                        <input type="checkbox" name="quizMode" id="quizMode">
-                        <span>🎯 Режим викторины</span>
-                    </label>
-                    <label class="checkbox-label">
-                        <input type="checkbox" name="timedMode" id="timedMode">
-                        <span>⏱️ На время (60 сек)</span>
-                    </label>
-                </div>
-            </div>
-            
-            <button type="button" class="btn btn-primary" onclick="startTraining()">Начать тренировку</button>
         </div>
-        
-        <!-- Тренировка -->
-        <div id="training" class="hidden" style="position: relative;">
-            <div class="stats">
-                <span class="stat">✓ Правильно: <span id="correctCount">0</span></span>
-                <span class="stat">✗ Неправильно: <span id="incorrectCount">0</span></span>
-                <span class="stat">Всего: <span id="totalCount">0</span></span>
-            </div>
-            
-            <div id="timerDisplay" class="timer timer-hidden">60</div>
-            
-            <div id="errorAlert" class="error-alert hidden">
-                <p id="errorMessage">❌ Неправильный ответ! Попробуйте ещё раз.</p>
-                <button class="error-close" onclick="closeErrorAndNext()">✕</button>
-            </div>
-            
-            <div id="completionAlert" class="completion-alert hidden">
-                <h2 style="color: #155724; margin-bottom: 10px; font-size: 1.5em;">🎉 Сессия завершена!</h2>
-                <p style="color: #155724; font-size: 1em; margin-bottom: 10px;">Решено: <span id="finalExamples">0</span></p>
-                <div style="background: white; border-radius: 8px; padding: 15px; margin: 10px 0;">
-                    <p style="color: #333; font-size: 0.95em; margin: 6px 0;">
-                        ✓ Правильных: <strong style="color: #28a745; font-size: 1.1em;" id="finalCorrect">0</strong>
-                    </p>
-                    <p style="color: #333; font-size: 0.95em; margin: 6px 0;">
-                        ✗ Неправильных: <strong style="color: #dc3545; font-size: 1.1em;" id="finalIncorrect">0</strong>
-                    </p>
-                    <p style="color: #333; font-size: 0.95em; margin: 6px 0;">
-                        Всего: <strong style="color: #667eea; font-size: 1.1em;" id="finalTotal">0</strong>
-                    </p>
-                </div>
-                <button type="button" class="btn btn-primary" onclick="showSettings()">Начать новую</button>
-            </div>
-            
-            <div id="problemSection">
-                <div class="problem-container">
-                    <h2 class="problem" id="problem">2 × 3 = ?</h2>
-                </div>
-                
-                <div id="answerSection">
-                    <!-- Обычный режим -->
-                    <div id="normalMode">
-                        <input type="number" id="answerInput" class="answer-input" placeholder="Введите ответ" min="1" max="100" readonly>
-                        
-                        <!-- Числовая клавиатура -->
-                        <div class="numeric-keypad">
-                            <button class="keypad-btn" onclick="addDigit(1)">1</button>
-                            <button class="keypad-btn" onclick="addDigit(2)">2</button>
-                            <button class="keypad-btn" onclick="addDigit(3)">3</button>
-                            <button class="keypad-btn" onclick="addDigit(4)">4</button>
-                            <button class="keypad-btn" onclick="addDigit(5)">5</button>
-                            <button class="keypad-btn" onclick="addDigit(6)">6</button>
-                            <button class="keypad-btn" onclick="addDigit(7)">7</button>
-                            <button class="keypad-btn" onclick="addDigit(8)">8</button>
-                            <button class="keypad-btn" onclick="addDigit(9)">9</button>
-                            <button class="keypad-btn clear-btn" onclick="clearInput()">⌫</button>
-                            <button class="keypad-btn" onclick="addDigit(0)">0</button>
-                            <button class="keypad-btn submit-btn" onclick="checkAnswer()">✓</button>
-                        </div>
-                    </div>
-                    
-                    <!-- Режим викторины -->
-                    <div id="quizModeSection" class="hidden">
-                        <div class="quiz-options" id="quizOptions"></div>
-                    </div>
-                </div>
-            </div>
-            
-            <button type="button" class="btn btn-secondary" onclick="resetTraining()">На главную</button>
+
+        <div class="form-group" id="examplesCountGroup">
+            <label for="examplesCount">Количество примеров: <strong id="examplesCountValue">10</strong></label>
+            <input type="range" name="examplesCount" id="examplesCount" value="10" min="10" max="100" step="5">
         </div>
+
+            <div class="form-group">
+                <label>Режим тренировки:</label>
+                <div class="radio-group" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                    <label class="radio-label">
+                        <input type="radio" name="trainingMode" value="normal" checked data-show-count="true">
+                        <span>📊 По количеству</span>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="trainingMode" value="infinite" data-show-count="false">
+                        <span>♾️ Бесконечный</span>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="trainingMode" value="quiz" data-show-count="true">
+                        <span>🎯 Викторина</span>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="trainingMode" value="timed" data-show-count="false">
+                        <span>⏱️ На время</span>
+                    </label>
+                </div>
+            </div>
+
+        <button type="button" class="btn btn-primary btn-start" onclick="startTraining()">🚀 Начать</button>
     </div>
-    
-    <script>
-        // Состояние приложения
-        let state = {
-            operation: 'multiplication',
-            mode: 'random',
-            number: null,
-            maxExamples: 10,
-            infiniteMode: false,
-            quizMode: false,
-            timedMode: false,
-            correctCount: 0,
-            incorrectCount: 0,
-            totalCount: 0,
-            examplesCount: 0,
-            currentProblem: null,
-            currentAnswer: null,
-            shownProblems: [],
-            mistakes: []
-        };
 
-        // Переменные для таймера
-        let gameTimer = null;
-        let timeLeft = 60;
+    <!-- Тренировка -->
+    <div id="training" class="hidden" style="position: relative;">
+        <div class="stats">
+            <span class="stat">✓ Правильно: <span id="correctCount">0</span></span>
+            <span class="stat">✗ Неправильно: <span id="incorrectCount">0</span></span>
+            <span class="stat">Всего: <span id="totalCount">0</span></span>
+        </div>
 
-        // Таймер для автоматического перехода
-        let errorTimer = null;
+        <div id="timerDisplay" class="timer timer-hidden">60</div>
 
-        // Флаг блокировки при ошибке
-        let isErrorShowing = false;
+        <div id="errorAlert" class="error-alert hidden">
+            <p id="errorMessage">❌ Неправильный ответ! Попробуйте ещё раз.</p>
+            <button class="error-close" onclick="closeErrorAndNext()">✕</button>
+        </div>
 
-        // Инициализация темы
-        function initTheme() {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            document.body.setAttribute('data-theme', savedTheme);
-            updateThemeIcon(savedTheme);
-        }
+        <div id="completionAlert" class="completion-alert hidden">
+            <h2 style="color: #155724; margin-bottom: 10px; font-size: 1.5em;">🎉 Сессия завершена!</h2>
+            <p style="color: #155724; font-size: 1em; margin-bottom: 10px;">Решено: <span id="finalExamples">0</span></p>
+            <div style="background: white; border-radius: 8px; padding: 15px; margin: 10px 0;">
+                <p style="color: #333; font-size: 0.95em; margin: 6px 0;">
+                    ✓ Правильных: <strong style="color: #28a745; font-size: 1.1em;" id="finalCorrect">0</strong>
+                </p>
+                <p style="color: #333; font-size: 0.95em; margin: 6px 0;">
+                    ✗ Неправильных: <strong style="color: #dc3545; font-size: 1.1em;" id="finalIncorrect">0</strong>
+                </p>
+                <p style="color: #333; font-size: 0.95em; margin: 6px 0;">
+                    Всего: <strong style="color: #667eea; font-size: 1.1em;" id="finalTotal">0</strong>
+                </p>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="showSettings()">Начать новую</button>
+        </div>
 
-        function toggleTheme() {
-            const currentTheme = document.body.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            document.body.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateThemeIcon(newTheme);
-        }
+        <div id="problemSection">
+            <div class="problem-container">
+                <h2 class="problem" id="problem">2 × 3 = ?</h2>
+            </div>
 
-        function updateThemeIcon(theme) {
-            document.getElementById('themeToggle').textContent = theme === 'light' ? '🌙' : '☀️';
-        }
+            <div id="answerSection">
+                <!-- Обычный режим -->
+                <div id="normalMode">
+                    <input type="number" id="answerInput" class="answer-input" placeholder="Введите ответ" min="1" max="100" readonly>
 
-        // Показать/скрыть выбор числа
-        document.querySelectorAll('input[name="mode"]').forEach(radio => {
-            radio.addEventListener('change', function() {
-                const numberGroup = document.getElementById('numberGroup');
-                if (this.value === 'specific') {
-                    numberGroup.classList.remove('hidden');
-                } else {
-                    numberGroup.classList.add('hidden');
-                }
-            });
+                    <!-- Числовая клавиатура -->
+                    <div class="numeric-keypad">
+                        <button class="keypad-btn" onclick="addDigit(1)">1</button>
+                        <button class="keypad-btn" onclick="addDigit(2)">2</button>
+                        <button class="keypad-btn" onclick="addDigit(3)">3</button>
+                        <button class="keypad-btn" onclick="addDigit(4)">4</button>
+                        <button class="keypad-btn" onclick="addDigit(5)">5</button>
+                        <button class="keypad-btn" onclick="addDigit(6)">6</button>
+                        <button class="keypad-btn" onclick="addDigit(7)">7</button>
+                        <button class="keypad-btn" onclick="addDigit(8)">8</button>
+                        <button class="keypad-btn" onclick="addDigit(9)">9</button>
+                        <button class="keypad-btn clear-btn" onclick="clearInput()">⌫</button>
+                        <button class="keypad-btn" onclick="addDigit(0)">0</button>
+                        <button class="keypad-btn submit-btn" onclick="checkAnswer()">✓</button>
+                    </div>
+                </div>
+
+                <!-- Режим викторины -->
+                <div id="quizModeSection" class="hidden">
+                    <div class="quiz-options" id="quizOptions"></div>
+                </div>
+            </div>
+        </div>
+
+        <button type="button" class="back-button" onclick="resetTraining()">← Назад</button>
+    </div>
+</div>
+
+<script>
+    // Состояние приложения
+    let state = {
+        operations: ['multiplication'],
+        operation: 'multiplication',
+        mode: 'random',
+        number: null,
+        maxExamples: 10,
+        infiniteMode: false,
+        quizMode: false,
+        timedMode: false,
+        correctCount: 0,
+        incorrectCount: 0,
+        totalCount: 0,
+        examplesCount: 0,
+        currentProblem: null,
+        currentAnswer: null,
+        shownProblems: [],
+        mistakes: []
+    };
+
+    // Переменные для таймера
+    let gameTimer = null;
+    let timeLeft = 60;
+
+    // Таймер для автоматического перехода
+    let errorTimer = null;
+
+    // Флаг блокировки при ошибке
+    let isErrorShowing = false;
+
+    // Инициализация темы
+    function initTheme() {
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.body.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+    }
+
+    function toggleTheme() {
+        const currentTheme = document.body.getAttribute('data-theme');
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        document.body.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        updateThemeIcon(newTheme);
+    }
+
+    function updateThemeIcon(theme) {
+        document.getElementById('themeToggle').textContent = theme === 'light' ? '🌙' : '☀️';
+    }
+
+    // Показать/скрыть выбор числа
+    document.querySelectorAll('input[name="mode"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            const numberGroup = document.getElementById('numberGroup');
+            const numberChips = document.getElementById('numberChips');
+            const numberInputs = document.querySelectorAll('input[name="number"]');
+
+            if (this.value === 'specific') {
+                numberGroup.classList.remove('disabled');
+                numberChips.classList.remove('disabled');
+                numberInputs.forEach(input => input.disabled = false);
+            } else {
+                numberGroup.classList.add('disabled');
+                numberChips.classList.add('disabled');
+                numberInputs.forEach(input => input.disabled = true);
+            }
+            validateOperations();
         });
+    });
 
-        // Начать тренировку
-        function startTraining() {
-            state.operation = document.querySelector('input[name="operation"]:checked').value;
-            state.mode = document.querySelector('input[name="mode"]:checked').value;
-            state.number = parseInt(document.getElementById('number').value);
-            state.maxExamples = parseInt(document.getElementById('examplesCount').value);
-            state.infiniteMode = document.getElementById('infiniteMode').checked;
-            state.quizMode = document.getElementById('quizMode').checked;
-            state.timedMode = document.getElementById('timedMode').checked;
-            
-            state.correctCount = 0;
-            state.incorrectCount = 0;
-            state.totalCount = 0;
-            state.examplesCount = 0;
-            state.shownProblems = [];
-            state.mistakes = [];
-            
-            document.getElementById('settings').classList.add('hidden');
-            document.getElementById('training').classList.remove('hidden');
-            document.getElementById('completionAlert').classList.add('hidden');
-            document.getElementById('problemSection').classList.remove('hidden');
-            
-            // Режим "На время"
-            if (state.timedMode) {
-                document.getElementById('timerDisplay').classList.remove('timer-hidden');
-                state.infiniteMode = true; // Неограниченное количество примеров
-                timeLeft = 60;
-                updateTimerDisplay();
-                startTimer();
-            } else {
-                document.getElementById('timerDisplay').classList.add('timer-hidden');
-            }
-            
-            if (state.quizMode) {
-                document.getElementById('normalMode').classList.add('hidden');
-                document.getElementById('quizModeSection').classList.remove('hidden');
-            } else {
-                document.getElementById('normalMode').classList.remove('hidden');
-                document.getElementById('quizModeSection').classList.add('hidden');
-            }
-            
-            generateProblem();
-            updateStats();
-        }
+    // По умолчанию отключаем выбор числа при загрузке
+    const numberGroup = document.getElementById('numberGroup');
+    const numberChips = document.getElementById('numberChips');
+    const numberInputs = document.querySelectorAll('input[name="number"]');
+    numberGroup.classList.add('disabled');
+    numberChips.classList.add('disabled');
+    numberInputs.forEach(input => input.disabled = true);
 
-        // Генерация примера
-        function generateProblem() {
-            let a, b, problem, answer;
-            
-            // Сбросить переменные свайпа и флаг ошибки
-            isDragging = false;
-            isErrorShowing = false;
-            
-            let currentOperation = state.operation;
-            
-            // Если режим "На время", генерируем смешанные примеры (умножение и деление)
-            if (state.timedMode) {
-                currentOperation = Math.random() < 0.5 ? 'multiplication' : 'division';
-            }
-            
-            if (state.mode === 'specific') {
-                a = state.number;
-                b = Math.floor(Math.random() * 10) + 1;
-            } else {
-                a = Math.floor(Math.random() * 10) + 1;
-                b = Math.floor(Math.random() * 10) + 1;
-            }
-            
-            if (currentOperation === 'multiplication') {
-                problem = `${a} × ${b}`;
-                answer = a * b;
-            } else {
-                const dividend = a * b;
-                problem = `${dividend} ÷ ${b}`;
-                answer = a;
-            }
-            
-            state.currentProblem = problem;
-            state.currentAnswer = answer;
-            
-            document.getElementById('problem').textContent = `${problem} = ?`;
-            const errorAlert = document.getElementById('errorAlert');
-            errorAlert.classList.add('hidden');
-            errorAlert.classList.remove('swiped');
-            errorAlert.style.transform = '';
-            errorAlert.style.opacity = '';
-            
-            if (state.quizMode) {
-                generateQuizOptions(answer);
-            } else {
-                document.getElementById('answerInput').value = '';
-            }
-        }
+    // Показать/скрыть поле количества примеров в зависимости от режима
+    document.querySelectorAll('input[name="trainingMode"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            const showCount = this.getAttribute('data-show-count') === 'true';
+            const examplesCountGroup = document.getElementById('examplesCountGroup');
+            const examplesCountInput = document.getElementById('examplesCount');
 
-        // Генерация вариантов для викторины
-        function generateQuizOptions(correctAnswer) {
-            const options = [correctAnswer];
-            
-            while (options.length < 4) {
-                const offset = Math.floor(Math.random() * 11) - 5;
-                if (offset === 0) continue;
-                
-                const incorrect = correctAnswer + offset;
-                if (incorrect > 0 && !options.includes(incorrect)) {
-                    options.push(incorrect);
-                }
+            if (showCount) {
+                examplesCountGroup.classList.remove('disabled');
+                examplesCountInput.disabled = false;
+            } else {
+                examplesCountGroup.classList.add('disabled');
+                examplesCountInput.disabled = true;
             }
-            
-            // Перемешать
-            for (let i = options.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [options[i], options[j]] = [options[j], options[i]];
-            }
-            
-            const quizOptionsDiv = document.getElementById('quizOptions');
-            quizOptionsDiv.innerHTML = '';
-            
-            options.forEach(option => {
-                const button = document.createElement('button');
-                button.className = 'quiz-option';
-                button.textContent = option;
-                button.dataset.value = option;
-                button.onclick = () => checkAnswer(option, button);
-                quizOptionsDiv.appendChild(button);
-            });
-        }
+            validateOperations();
+        });
+    });
 
-        // Закрыть ошибку и перейти к следующему примеру
-        function closeErrorAndNext(event) {
-            if (event) {
-                event.stopPropagation();
-                event.preventDefault();
-            }
-            if (errorTimer) {
-                clearTimeout(errorTimer);
-                errorTimer = null;
-            }
-            isErrorShowing = false;
-            const errorAlert = document.getElementById('errorAlert');
-            errorAlert.classList.add('hidden');
-            errorAlert.classList.remove('swiped');
-            errorAlert.style.transform = '';
-            errorAlert.style.opacity = '';
-            generateProblem();
-        }
+    // Обновление значения ползунка
+    document.getElementById('examplesCount').addEventListener('input', function() {
+        document.getElementById('examplesCountValue').textContent = this.value;
+    });
 
-        // Проверка ответа
-        function checkAnswer(userAnswer = null, clickedButton = null) {
-            // Если показан алрет ошибки, блокируем выбор ответа
-            if (isErrorShowing) {
+    // Обработчики изменения операций - предотвращаем снятие последней галочки
+    document.querySelectorAll('input[name="operation"]').forEach(checkbox => {
+        checkbox.addEventListener('change', function(e) {
+            const checkedCount = document.querySelectorAll('input[name="operation"]:checked').length;
+
+            // Если пытаются снять последнюю галочку, отменяем действие
+            if (checkedCount === 0) {
+                e.preventDefault();
+                this.checked = true;
                 return;
             }
-            
-            if (userAnswer === null) {
-                userAnswer = parseInt(document.getElementById('answerInput').value);
+
+            validateOperations();
+        });
+    });
+
+    // Валидация выбора операций
+    function validateOperations() {
+        const selectedOperations = document.querySelectorAll('input[name="operation"]:checked');
+        const startButton = document.querySelector('.btn-primary');
+
+        // Всегда должна быть выбрана минимум одна операция
+        if (selectedOperations.length === 0) {
+            // Это состояние не должно возникать из-за блока выше, но на всякий случай
+            const firstCheckbox = document.querySelector('input[name="operation"]');
+            if (firstCheckbox) {
+                firstCheckbox.checked = true;
             }
-            
-            state.totalCount++;
-            
-            if (userAnswer === state.currentAnswer) {
-                state.correctCount++;
-                state.examplesCount++;
-                
-                // Если режим викторины и нажата кнопка, подсветить её зеленым
-                if (state.quizMode && clickedButton) {
-                    clickedButton.classList.add('correct');
-                    // Через 0.5 сек перейти к следующему примеру
-                    setTimeout(() => {
-                        generateProblem();
-                    }, 500);
-                    return;
-                }
-                
-                // Удалить из ошибок если был
-                const mistakeIndex = state.mistakes.indexOf(state.currentProblem);
-                if (mistakeIndex > -1) {
-                    state.mistakes.splice(mistakeIndex, 1);
-                }
-                
-                // Проверить завершение
-                if (!state.infiniteMode && state.examplesCount >= state.maxExamples) {
-                    showCompletion();
-                    return;
-                }
-                
-                generateProblem();
-            } else {
-                state.incorrectCount++;
-                
-                // Если режим викторины и нажата кнопка, подсветить её красным
-                if (state.quizMode && clickedButton) {
-                    clickedButton.classList.add('incorrect');
-                    
-                    // Найти и подсветить правильную кнопку
-                    const allButtons = document.querySelectorAll('.quiz-option');
-                    allButtons.forEach(btn => {
-                        if (parseInt(btn.dataset.value) === state.currentAnswer) {
-                            btn.classList.add('correct');
-                        }
-                    });
-                    
-                    // Через 1.5 сек перейти к следующему примеру
-                    setTimeout(() => {
-                        generateProblem();
-                    }, 1500);
-                    return;
-                }
-                
-                // Установить флаг блокировки
-                isErrorShowing = true;
-                
-                // Показать правильный ответ
-                document.getElementById('errorMessage').innerHTML = 
-                    `❌ Правильный ответ: <strong>${state.currentAnswer}</strong>`;
-                document.getElementById('errorAlert').classList.remove('hidden');
-                
-                // Добавить в ошибки если нет
-                if (!state.mistakes.includes(state.currentProblem)) {
-                    state.mistakes.push(state.currentProblem);
-                }
-                
-                // Очистить предыдущий таймер если есть
-                if (errorTimer) {
-                    clearTimeout(errorTimer);
-                }
-                
-                // Показать ошибку на 3 секунды, затем перейти к следующему примеру
-                errorTimer = setTimeout(() => {
-                    isErrorShowing = false;
-                    document.getElementById('errorAlert').classList.add('hidden');
-                    generateProblem();
-                }, 3000);
-            }
-            
-            updateStats();
         }
 
-        // Обновить статистику
-        function updateStats() {
-            document.getElementById('correctCount').textContent = state.correctCount;
-            document.getElementById('incorrectCount').textContent = state.incorrectCount;
-            document.getElementById('totalCount').textContent = state.totalCount;
+        // Кнопка всегда активна, так как минимум одна операция всегда выбрана
+        startButton.disabled = false;
+        startButton.textContent = '🚀 Начать';
+        startButton.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+    }
+
+    // Начать тренировку
+    function startTraining() {
+        const selectedOperations = [];
+        document.querySelectorAll('input[name="operation"]:checked').forEach(checkbox => {
+            selectedOperations.push(checkbox.value);
+        });
+
+        // Проверка: должна быть выбрана хотя бы одна операция
+        if (selectedOperations.length === 0) {
+            return;
+        }
+
+        state.operations = selectedOperations;
+        state.operation = selectedOperations.length === 1 ? selectedOperations[0] : null;
+
+        state.mode = document.querySelector('input[name="mode"]:checked').value;
+        if (state.mode === 'specific') {
+            state.number = parseInt(document.querySelector('input[name="number"]:checked').value);
+        } else {
+            state.number = null;
+        }
+        state.maxExamples = parseInt(document.getElementById('examplesCount').value);
+
+        const trainingMode = document.querySelector('input[name="trainingMode"]:checked').value;
+        state.infiniteMode = trainingMode === 'infinite';
+        state.quizMode = trainingMode === 'quiz';
+        state.timedMode = trainingMode === 'timed';
+
+        state.correctCount = 0;
+        state.incorrectCount = 0;
+        state.totalCount = 0;
+        state.examplesCount = 0;
+        state.shownProblems = [];
+        state.mistakes = [];
+
+        document.getElementById('settings').classList.add('hidden');
+        document.getElementById('training').classList.remove('hidden');
+        document.getElementById('completionAlert').classList.add('hidden');
+        document.getElementById('problemSection').classList.remove('hidden');
+
+        // Режим "На время"
+        if (state.timedMode) {
+            document.getElementById('timerDisplay').classList.remove('timer-hidden');
+            state.infiniteMode = true; // Неограниченное количество примеров
+            timeLeft = 60;
+            updateTimerDisplay();
+            startTimer();
+        } else {
+            document.getElementById('timerDisplay').classList.add('timer-hidden');
+        }
+
+        if (state.quizMode) {
+            document.getElementById('normalMode').classList.add('hidden');
+            document.getElementById('quizModeSection').classList.remove('hidden');
+        } else {
+            document.getElementById('normalMode').classList.remove('hidden');
+            document.getElementById('quizModeSection').classList.add('hidden');
+        }
+
+        generateProblem();
+        updateStats();
+    }
+
+    // Генерация примера
+    function generateProblem() {
+        let a, b, problem, answer;
+
+        // Сбросить переменные свайпа и флаг ошибки
+        isDragging = false;
+        isErrorShowing = false;
+
+        let currentOperation;
+
+        // Определяем текущую операцию
+        if (state.operations.length === 1) {
+            currentOperation = state.operations[0];
+        } else {
+            // Если выбраны обе операции, выбираем случайно
+            currentOperation = Math.random() < 0.5 ? 'multiplication' : 'division';
+        }
+
+        if (state.mode === 'specific') {
+            a = state.number;
+            b = Math.floor(Math.random() * 10) + 1;
+        } else {
+            a = Math.floor(Math.random() * 10) + 1;
+            b = Math.floor(Math.random() * 10) + 1;
+        }
+
+        if (currentOperation === 'multiplication') {
+            problem = `${a} × ${b}`;
+            answer = a * b;
+        } else {
+            const dividend = a * b;
+            problem = `${dividend} ÷ ${b}`;
+            answer = a;
+        }
+
+        state.currentProblem = problem;
+        state.currentAnswer = answer;
+
+        document.getElementById('problem').textContent = `${problem} = ?`;
+        const errorAlert = document.getElementById('errorAlert');
+        errorAlert.classList.add('hidden');
+        errorAlert.classList.remove('swiped');
+        errorAlert.style.transform = '';
+        errorAlert.style.opacity = '';
+
+        if (state.quizMode) {
+            generateQuizOptions(answer);
+        } else {
+            document.getElementById('answerInput').value = '';
+        }
+    }
+
+    // Генерация вариантов для викторины
+    function generateQuizOptions(correctAnswer) {
+        const options = [correctAnswer];
+
+        while (options.length < 4) {
+            const offset = Math.floor(Math.random() * 11) - 5;
+            if (offset === 0) continue;
+
+            const incorrect = correctAnswer + offset;
+            if (incorrect > 0 && !options.includes(incorrect)) {
+                options.push(incorrect);
+            }
+        }
+
+        // Перемешать
+        for (let i = options.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [options[i], options[j]] = [options[j], options[i]];
+        }
+
+        const quizOptionsDiv = document.getElementById('quizOptions');
+        quizOptionsDiv.innerHTML = '';
+
+        options.forEach(option => {
+            const button = document.createElement('button');
+            button.className = 'quiz-option';
+            button.textContent = option;
+            button.dataset.value = option;
+            button.onclick = () => checkAnswer(option, button);
+            quizOptionsDiv.appendChild(button);
+        });
+    }
+
+    // Закрыть ошибку и перейти к следующему примеру
+    function closeErrorAndNext(event) {
+        if (event) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
+        if (errorTimer) {
+            clearTimeout(errorTimer);
+            errorTimer = null;
+        }
+        isErrorShowing = false;
+        const errorAlert = document.getElementById('errorAlert');
+        errorAlert.classList.add('hidden');
+        errorAlert.classList.remove('swiped');
+        errorAlert.style.transform = '';
+        errorAlert.style.opacity = '';
+        generateProblem();
+    }
+
+    // Проверка ответа
+    function checkAnswer(userAnswer = null, clickedButton = null) {
+        // Если показан алрет ошибки, блокируем выбор ответа
+        if (isErrorShowing) {
+            return;
+        }
+
+        if (userAnswer === null) {
+            userAnswer = parseInt(document.getElementById('answerInput').value);
+        }
+
+        state.totalCount++;
+
+        if (userAnswer === state.currentAnswer) {
+            state.correctCount++;
+            state.examplesCount++;
+
+            // Если режим викторины и нажата кнопка, подсветить её зеленым
+            if (state.quizMode && clickedButton) {
+                clickedButton.classList.add('correct');
+                // Через 0.5 сек перейти к следующему примеру
+                setTimeout(() => {
+                    generateProblem();
+                }, 500);
+                return;
+            }
+
+            // Удалить из ошибок если был
+            const mistakeIndex = state.mistakes.indexOf(state.currentProblem);
+            if (mistakeIndex > -1) {
+                state.mistakes.splice(mistakeIndex, 1);
+            }
+
+            // Проверить завершение
+            if (!state.infiniteMode && state.examplesCount >= state.maxExamples) {
+                showCompletion();
+                return;
+            }
+
+            generateProblem();
+        } else {
+            state.incorrectCount++;
+
+            // Если режим викторины и нажата кнопка, подсветить её красным
+            if (state.quizMode && clickedButton) {
+                clickedButton.classList.add('incorrect');
+
+                // Найти и подсветить правильную кнопку
+                const allButtons = document.querySelectorAll('.quiz-option');
+                allButtons.forEach(btn => {
+                    if (parseInt(btn.dataset.value) === state.currentAnswer) {
+                        btn.classList.add('correct');
+                    }
+                });
+
+                // Через 1.5 сек перейти к следующему примеру
+                setTimeout(() => {
+                    generateProblem();
+                }, 1500);
+                return;
+            }
+
+            // Установить флаг блокировки
+            isErrorShowing = true;
+
+            // Показать правильный ответ
+            document.getElementById('errorMessage').innerHTML =
+                `❌ Правильный ответ: <strong>${state.currentAnswer}</strong>`;
+            document.getElementById('errorAlert').classList.remove('hidden');
+
+            // Добавить в ошибки если нет
+            if (!state.mistakes.includes(state.currentProblem)) {
+                state.mistakes.push(state.currentProblem);
+            }
+
+            // Очистить предыдущий таймер если есть
+            if (errorTimer) {
+                clearTimeout(errorTimer);
+            }
+
+            // Показать ошибку на 3 секунды, затем перейти к следующему примеру
+            errorTimer = setTimeout(() => {
+                isErrorShowing = false;
+                document.getElementById('errorAlert').classList.add('hidden');
+                generateProblem();
+            }, 3000);
+        }
+
+        updateStats();
+    }
+
+    // Обновить статистику
+    function updateStats() {
+        document.getElementById('correctCount').textContent = state.correctCount;
+        document.getElementById('incorrectCount').textContent = state.incorrectCount;
+        document.getElementById('totalCount').textContent = state.totalCount;
+    }
+
+    // Показать завершение
+    function showCompletion() {
+        document.getElementById('problemSection').classList.add('hidden');
+        document.getElementById('completionAlert').classList.remove('hidden');
+
+        document.getElementById('finalExamples').textContent = state.examplesCount;
+        document.getElementById('finalCorrect').textContent = state.correctCount;
+        document.getElementById('finalIncorrect').textContent = state.incorrectCount;
+        document.getElementById('finalTotal').textContent = state.totalCount;
+    }
+
+    // Функции таймера для режима "На время"
+    function startTimer() {
+        if (gameTimer) {
+            clearInterval(gameTimer);
+        }
+        gameTimer = setInterval(() => {
+            timeLeft--;
+            updateTimerDisplay();
+
+            if (timeLeft <= 0) {
+                endGame();
+            }
+        }, 1000);
+    }
+
+    function updateTimerDisplay() {
+        const timerDisplay = document.getElementById('timerDisplay');
+        timerDisplay.textContent = timeLeft;
+
+        // Меняем цвет в зависимости от времени
+        timerDisplay.classList.remove('warning', 'danger');
+        if (timeLeft <= 10) {
+            timerDisplay.classList.add('danger');
+        } else if (timeLeft <= 20) {
+            timerDisplay.classList.add('warning');
+        }
+    }
+
+    function endGame() {
+        if (gameTimer) {
+            clearInterval(gameTimer);
+            gameTimer = null;
         }
 
         // Показать завершение
-        function showCompletion() {
-            document.getElementById('problemSection').classList.add('hidden');
-            document.getElementById('completionAlert').classList.remove('hidden');
-            
-            document.getElementById('finalExamples').textContent = state.examplesCount;
-            document.getElementById('finalCorrect').textContent = state.correctCount;
-            document.getElementById('finalIncorrect').textContent = state.incorrectCount;
-            document.getElementById('finalTotal').textContent = state.totalCount;
+        document.getElementById('problemSection').classList.add('hidden');
+        document.getElementById('completionAlert').classList.remove('hidden');
+        document.getElementById('timerDisplay').classList.add('timer-hidden');
+
+        document.getElementById('finalExamples').textContent = state.totalCount;
+        document.getElementById('finalCorrect').textContent = state.correctCount;
+        document.getElementById('finalIncorrect').textContent = state.incorrectCount;
+        document.getElementById('finalTotal').textContent = state.totalCount;
+    }
+
+    // Функции числовой клавиатуры
+    function addDigit(digit) {
+        const input = document.getElementById('answerInput');
+        const currentValue = input.value;
+
+        // Ограничить длину до 3 цифр (максимум 100)
+        if (currentValue.length < 3) {
+            const newValue = currentValue + digit;
+            input.value = newValue;
         }
+    }
 
-        // Функции таймера для режима "На время"
-        function startTimer() {
-            if (gameTimer) {
-                clearInterval(gameTimer);
-            }
-            gameTimer = setInterval(() => {
-                timeLeft--;
-                updateTimerDisplay();
-                
-                if (timeLeft <= 0) {
-                    endGame();
-                }
-            }, 1000);
+    function clearInput() {
+        const input = document.getElementById('answerInput');
+        const currentValue = input.value;
+
+        // Удалить последнюю цифру
+        if (currentValue.length > 0) {
+            const newValue = currentValue.slice(0, -1);
+            input.value = newValue;
         }
+    }
 
-        function updateTimerDisplay() {
-            const timerDisplay = document.getElementById('timerDisplay');
-            timerDisplay.textContent = timeLeft;
-            
-            // Меняем цвет в зависимости от времени
-            timerDisplay.classList.remove('warning', 'danger');
-            if (timeLeft <= 10) {
-                timerDisplay.classList.add('danger');
-            } else if (timeLeft <= 20) {
-                timerDisplay.classList.add('warning');
-            }
+    // Сброс - на главный экран
+    function showSettings() {
+        if (gameTimer) {
+            clearInterval(gameTimer);
+            gameTimer = null;
         }
+        document.getElementById('settings').classList.remove('hidden');
+        document.getElementById('training').classList.add('hidden');
+        document.getElementById('timerDisplay').classList.add('timer-hidden');
+    }
 
-        function endGame() {
-            if (gameTimer) {
-                clearInterval(gameTimer);
-                gameTimer = null;
-            }
-            
-            // Показать завершение
-            document.getElementById('problemSection').classList.add('hidden');
-            document.getElementById('completionAlert').classList.remove('hidden');
-            document.getElementById('timerDisplay').classList.add('timer-hidden');
-            
-            document.getElementById('finalExamples').textContent = state.totalCount;
-            document.getElementById('finalCorrect').textContent = state.correctCount;
-            document.getElementById('finalIncorrect').textContent = state.incorrectCount;
-            document.getElementById('finalTotal').textContent = state.totalCount;
+    function resetTraining() {
+        showSettings();
+    }
+
+    // Обработка свайпа для алрета ошибки
+    const errorAlert = document.getElementById('errorAlert');
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchCurrentX = 0;
+    let touchCurrentY = 0;
+    let isDragging = false;
+    const swipeThreshold = 100; // Порог для свайпа
+
+    // Touch события
+    errorAlert.addEventListener('touchstart', function(e) {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+        touchCurrentX = touchStartX;
+        touchCurrentY = touchStartY;
+        lastTouchStartTime = Date.now();
+        isDragging = true;
+        errorAlert.classList.add('dragging');
+        errorAlert.classList.remove('swiped');
+    }, { passive: true });
+
+    errorAlert.addEventListener('touchmove', function(e) {
+        if (!isDragging) return;
+        touchCurrentX = e.touches[0].clientX;
+        touchCurrentY = e.touches[0].clientY;
+        const diff = touchCurrentY - touchStartY;
+
+        // Только свайп вверх
+        if (diff < 0) {
+            errorAlert.style.transform = `translateY(${diff}px)`;
+            errorAlert.style.opacity = 1 - Math.abs(diff) / 200;
         }
+    }, { passive: true });
 
-        // Функции числовой клавиатуры
-        function addDigit(digit) {
-            const input = document.getElementById('answerInput');
-            const currentValue = input.value;
-            
-            // Ограничить длину до 3 цифр (максимум 100)
-            if (currentValue.length < 3) {
-                const newValue = currentValue + digit;
-                input.value = newValue;
-            }
-        }
+    errorAlert.addEventListener('touchend', function(e) {
+        if (!isDragging) return;
+        isDragging = false;
+        errorAlert.classList.remove('dragging');
 
-        function clearInput() {
-            const input = document.getElementById('answerInput');
-            const currentValue = input.value;
-            
-            // Удалить последнюю цифру
-            if (currentValue.length > 0) {
-                const newValue = currentValue.slice(0, -1);
-                input.value = newValue;
-            }
-        }
+        const diffY = touchStartY - touchCurrentY;
+        const diffX = Math.abs(touchStartX - touchCurrentX);
 
-        // Сброс - на главный экран
-        function showSettings() {
-            if (gameTimer) {
-                clearInterval(gameTimer);
-                gameTimer = null;
-            }
-            document.getElementById('settings').classList.remove('hidden');
-            document.getElementById('training').classList.add('hidden');
-            document.getElementById('timerDisplay').classList.add('timer-hidden');
-        }
-
-        function resetTraining() {
-            showSettings();
-        }
-
-        // Обработка свайпа для алрета ошибки
-        const errorAlert = document.getElementById('errorAlert');
-        let touchStartX = 0;
-        let touchStartY = 0;
-        let touchCurrentX = 0;
-        let touchCurrentY = 0;
-        let isDragging = false;
-        const swipeThreshold = 100; // Порог для свайпа
-
-        // Touch события
-        errorAlert.addEventListener('touchstart', function(e) {
-            touchStartX = e.touches[0].clientX;
-            touchStartY = e.touches[0].clientY;
-            touchCurrentX = touchStartX;
-            touchCurrentY = touchStartY;
-            lastTouchStartTime = Date.now();
-            isDragging = true;
-            errorAlert.classList.add('dragging');
-            errorAlert.classList.remove('swiped');
-        }, { passive: true });
-
-        errorAlert.addEventListener('touchmove', function(e) {
-            if (!isDragging) return;
-            touchCurrentX = e.touches[0].clientX;
-            touchCurrentY = e.touches[0].clientY;
-            const diff = touchCurrentY - touchStartY;
-            
-            // Только свайп вверх
-            if (diff < 0) {
-                errorAlert.style.transform = `translateY(${diff}px)`;
-                errorAlert.style.opacity = 1 - Math.abs(diff) / 200;
-            }
-        }, { passive: true });
-
-        errorAlert.addEventListener('touchend', function(e) {
-            if (!isDragging) return;
-            isDragging = false;
-            errorAlert.classList.remove('dragging');
-            
-            const diffY = touchStartY - touchCurrentY;
-            const diffX = Math.abs(touchStartX - touchCurrentX);
-            
-            // Если свайп вверх больше порога и нет горизонтального движения, закрываем
-            if (diffY > swipeThreshold && diffX < 50) {
-                errorAlert.classList.add('swiped');
-                setTimeout(() => {
-                    closeErrorAndNext();
-                }, 300);
+        // Если свайп вверх больше порога и нет горизонтального движения, закрываем
+        if (diffY > swipeThreshold && diffX < 50) {
+            errorAlert.classList.add('swiped');
+            setTimeout(() => {
+                closeErrorAndNext();
+            }, 300);
+            return;
+        } else {
+            // Если это простой клик, закрываем
+            const timeDiff = Date.now() - lastTouchStartTime;
+            if (timeDiff < 300 && diffY < 10 && diffX < 10) {
+                closeErrorAndNext();
                 return;
-            } else {
-                // Если это простой клик, закрываем
-                const timeDiff = Date.now() - lastTouchStartTime;
-                if (timeDiff < 300 && diffY < 10 && diffX < 10) {
-                    closeErrorAndNext();
-                    return;
-                }
             }
-            
-            // Возвращаем на место
-            errorAlert.style.transform = 'translateY(0)';
-            errorAlert.style.opacity = 1;
-        });
+        }
 
-        // Mouse события (для десктопа)
-        errorAlert.addEventListener('mousedown', function(e) {
-            touchStartX = e.clientX;
-            touchStartY = e.clientY;
-            touchCurrentX = touchStartX;
-            touchCurrentY = touchStartY;
-            isDragging = true;
-            lastMouseStartTime = Date.now();
-            errorAlert.classList.add('dragging');
-            errorAlert.classList.remove('swiped');
-        });
+        // Возвращаем на место
+        errorAlert.style.transform = 'translateY(0)';
+        errorAlert.style.opacity = 1;
+    });
 
-        document.addEventListener('mousemove', function(e) {
-            if (!isDragging) return;
-            touchCurrentX = e.clientX;
-            touchCurrentY = e.clientY;
-            const diff = touchCurrentY - touchStartY;
-            
-            // Только свайп вверх
-            if (diff < 0) {
-                errorAlert.style.transform = `translateY(${diff}px)`;
-                errorAlert.style.opacity = 1 - Math.abs(diff) / 200;
-            }
-        });
+    // Mouse события (для десктопа)
+    errorAlert.addEventListener('mousedown', function(e) {
+        touchStartX = e.clientX;
+        touchStartY = e.clientY;
+        touchCurrentX = touchStartX;
+        touchCurrentY = touchStartY;
+        isDragging = true;
+        lastMouseStartTime = Date.now();
+        errorAlert.classList.add('dragging');
+        errorAlert.classList.remove('swiped');
+    });
 
-        document.addEventListener('mouseup', function(e) {
-            if (!isDragging) return;
-            isDragging = false;
-            errorAlert.classList.remove('dragging');
-            
-            const diffY = touchStartY - touchCurrentY;
-            const diffX = Math.abs(touchStartX - touchCurrentX);
-            
-            // Если свайп вверх больше порога и нет горизонтального движения, закрываем
-            if (diffY > swipeThreshold && diffX < 50) {
-                errorAlert.classList.add('swiped');
-                setTimeout(() => {
-                    closeErrorAndNext();
-                }, 300);
+    document.addEventListener('mousemove', function(e) {
+        if (!isDragging) return;
+        touchCurrentX = e.clientX;
+        touchCurrentY = e.clientY;
+        const diff = touchCurrentY - touchStartY;
+
+        // Только свайп вверх
+        if (diff < 0) {
+            errorAlert.style.transform = `translateY(${diff}px)`;
+            errorAlert.style.opacity = 1 - Math.abs(diff) / 200;
+        }
+    });
+
+    document.addEventListener('mouseup', function(e) {
+        if (!isDragging) return;
+        isDragging = false;
+        errorAlert.classList.remove('dragging');
+
+        const diffY = touchStartY - touchCurrentY;
+        const diffX = Math.abs(touchStartX - touchCurrentX);
+
+        // Если свайп вверх больше порога и нет горизонтального движения, закрываем
+        if (diffY > swipeThreshold && diffX < 50) {
+            errorAlert.classList.add('swiped');
+            setTimeout(() => {
+                closeErrorAndNext();
+            }, 300);
+            return;
+        } else {
+            // Если это простой клик, закрываем
+            const timeDiff = Date.now() - lastMouseStartTime;
+            if (timeDiff < 300 && diffY < 10 && diffX < 10) {
+                closeErrorAndNext();
                 return;
-            } else {
-                // Если это простой клик, закрываем
-                const timeDiff = Date.now() - lastMouseStartTime;
-                if (timeDiff < 300 && diffY < 10 && diffX < 10) {
-                    closeErrorAndNext();
-                    return;
-                }
             }
-            
-            // Возвращаем на место
-            errorAlert.style.transform = 'translateY(0)';
-            errorAlert.style.opacity = 1;
-        });
+        }
 
-        // Переменные для отслеживания времени
-        let lastTouchStartTime = 0;
-        let lastMouseStartTime = 0;
+        // Возвращаем на место
+        errorAlert.style.transform = 'translateY(0)';
+        errorAlert.style.opacity = 1;
+    });
 
-        // Инициализация
-        initTheme();
-        document.getElementById('themeToggle').addEventListener('click', toggleTheme);
-    </script>
+    // Переменные для отслеживания времени
+    let lastTouchStartTime = 0;
+    let lastMouseStartTime = 0;
+
+    // Инициализация
+    initTheme();
+    document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+    // Инициализация валидации
+    validateOperations();
+</script>
 </body>
 </html>
