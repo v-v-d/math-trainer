@@ -204,6 +204,32 @@
             color: #f3f4f6;
         }
 
+        .timer {
+            font-size: 3em;
+            font-weight: 700;
+            color: #667eea;
+            margin: 20px 0;
+            transition: color 0.3s ease;
+        }
+
+        .timer.warning {
+            color: #f39c12;
+        }
+
+        .timer.danger {
+            color: #dc3545;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .timer-hidden {
+            display: none;
+        }
+
         .error-alert {
             background: #f8d7da;
             border: 2px solid #dc3545;
@@ -534,6 +560,13 @@
                 </label>
             </div>
             
+            <div class="form-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="timedMode" id="timedMode">
+                    <span>⏱️ Режим "На время" (60 сек, смешанные примеры)</span>
+                </label>
+            </div>
+            
             <button type="button" class="btn btn-primary" onclick="startTraining()">Начать тренировку</button>
         </div>
         
@@ -544,6 +577,8 @@
                 <span class="stat">✗ Неправильно: <span id="incorrectCount">0</span></span>
                 <span class="stat">Всего: <span id="totalCount">0</span></span>
             </div>
+            
+            <div id="timerDisplay" class="timer timer-hidden">60</div>
             
             <div id="errorAlert" class="error-alert hidden">
                 <p id="errorMessage">❌ Неправильный ответ! Попробуйте ещё раз.</p>
@@ -599,6 +634,7 @@
             maxExamples: 10,
             infiniteMode: false,
             quizMode: false,
+            timedMode: false,
             correctCount: 0,
             incorrectCount: 0,
             totalCount: 0,
@@ -608,6 +644,10 @@
             shownProblems: [],
             mistakes: []
         };
+
+        // Переменные для таймера
+        let gameTimer = null;
+        let timeLeft = 60;
 
         // Таймер для автоматического перехода
         let errorTimer = null;
@@ -654,6 +694,7 @@
             state.maxExamples = parseInt(document.getElementById('examplesCount').value);
             state.infiniteMode = document.getElementById('infiniteMode').checked;
             state.quizMode = document.getElementById('quizMode').checked;
+            state.timedMode = document.getElementById('timedMode').checked;
             
             state.correctCount = 0;
             state.incorrectCount = 0;
@@ -666,6 +707,17 @@
             document.getElementById('training').classList.remove('hidden');
             document.getElementById('completionAlert').classList.add('hidden');
             document.getElementById('problemSection').classList.remove('hidden');
+            
+            // Режим "На время"
+            if (state.timedMode) {
+                document.getElementById('timerDisplay').classList.remove('timer-hidden');
+                state.infiniteMode = true; // Неограниченное количество примеров
+                timeLeft = 60;
+                updateTimerDisplay();
+                startTimer();
+            } else {
+                document.getElementById('timerDisplay').classList.add('timer-hidden');
+            }
             
             if (state.quizMode) {
                 document.getElementById('normalMode').classList.add('hidden');
@@ -687,6 +739,13 @@
             isDragging = false;
             isErrorShowing = false;
             
+            let currentOperation = state.operation;
+            
+            // Если режим "На время", генерируем смешанные примеры (умножение и деление)
+            if (state.timedMode) {
+                currentOperation = Math.random() < 0.5 ? 'multiplication' : 'division';
+            }
+            
             if (state.mode === 'specific') {
                 a = state.number;
                 b = Math.floor(Math.random() * 10) + 1;
@@ -695,7 +754,7 @@
                 b = Math.floor(Math.random() * 10) + 1;
             }
             
-            if (state.operation === 'multiplication') {
+            if (currentOperation === 'multiplication') {
                 problem = `${a} × ${b}`;
                 answer = a * b;
             } else {
@@ -883,10 +942,61 @@
             document.getElementById('finalTotal').textContent = state.totalCount;
         }
 
+        // Функции таймера для режима "На время"
+        function startTimer() {
+            if (gameTimer) {
+                clearInterval(gameTimer);
+            }
+            gameTimer = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const timerDisplay = document.getElementById('timerDisplay');
+            timerDisplay.textContent = timeLeft;
+            
+            // Меняем цвет в зависимости от времени
+            timerDisplay.classList.remove('warning', 'danger');
+            if (timeLeft <= 10) {
+                timerDisplay.classList.add('danger');
+            } else if (timeLeft <= 20) {
+                timerDisplay.classList.add('warning');
+            }
+        }
+
+        function endGame() {
+            if (gameTimer) {
+                clearInterval(gameTimer);
+                gameTimer = null;
+            }
+            
+            // Показать завершение
+            document.getElementById('problemSection').classList.add('hidden');
+            document.getElementById('completionAlert').classList.remove('hidden');
+            document.getElementById('timerDisplay').classList.add('timer-hidden');
+            
+            document.getElementById('finalExamples').textContent = state.totalCount;
+            document.getElementById('finalCorrect').textContent = state.correctCount;
+            document.getElementById('finalIncorrect').textContent = state.incorrectCount;
+            document.getElementById('finalTotal').textContent = state.totalCount;
+        }
+
         // Сброс
         function resetTraining() {
+            if (gameTimer) {
+                clearInterval(gameTimer);
+                gameTimer = null;
+            }
+            
             document.getElementById('settings').classList.remove('hidden');
             document.getElementById('training').classList.add('hidden');
+            document.getElementById('timerDisplay').classList.add('timer-hidden');
         }
 
         // Обработка Enter
