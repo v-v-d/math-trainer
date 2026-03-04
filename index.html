@@ -37,21 +37,21 @@
             max-height: 95vh;
             text-align: center;
             transition: background 0.3s ease, color 0.3s ease;
-            overflow-y: hidden;
-            display: flex;
-            flex-direction: column;
+            overflow-y: scroll;
+            -webkit-overflow-scrolling: touch;
         }
 
         #settings {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
+            display: block;
+            height: auto;
+            min-height: 0;
         }
 
         #training {
             display: flex;
             flex-direction: column;
             height: 100%;
+            min-height: 0;
         }
 
         body[data-theme="dark"] .container {
@@ -963,6 +963,12 @@
                 border-radius: 15px;
                 height: 92vh;
                 height: 92dvh;
+                overflow-y: scroll;
+                -webkit-overflow-scrolling: touch;
+            }
+            #settings {
+                display: block;
+                min-height: 100%;
             }
             h1 {
                 font-size: 1.5em;
@@ -1119,7 +1125,12 @@
                 max-width: 95%;
                 max-height: 95vh;
                 padding: 10px;
-                overflow-y: auto;
+                overflow-y: scroll;
+                -webkit-overflow-scrolling: touch;
+            }
+            #settings {
+                display: block;
+                min-height: 100%;
             }
             h1 {
                 font-size: 1.3em;
@@ -2730,8 +2741,6 @@
         }
         document.getElementById('settings').classList.remove('hidden');
         document.getElementById('achievements').classList.add('hidden');
-        document.getElementById('settings').style.display = 'flex';
-        document.getElementById('achievements').style.display = 'none';
         document.getElementById('training').classList.add('hidden');
         document.getElementById('timerDisplay').classList.add('timer-hidden');
     }
