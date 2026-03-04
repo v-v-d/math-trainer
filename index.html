@@ -37,12 +37,15 @@
             max-height: 95vh;
             text-align: center;
             transition: background 0.3s ease, color 0.3s ease;
-            overflow-y: scroll;
-            -webkit-overflow-scrolling: touch;
+            overflow-y: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         #settings {
-            display: block;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
 
         #training {
@@ -960,12 +963,6 @@
                 border-radius: 15px;
                 height: 92vh;
                 height: 92dvh;
-                overflow-y: scroll;
-                -webkit-overflow-scrolling: touch;
-            }
-            #settings {
-                display: block;
-                min-height: 100%;
             }
             h1 {
                 font-size: 1.5em;
@@ -1122,12 +1119,7 @@
                 max-width: 95%;
                 max-height: 95vh;
                 padding: 10px;
-                overflow-y: scroll;
-                -webkit-overflow-scrolling: touch;
-            }
-            #settings {
-                display: block;
-                min-height: 100%;
+                overflow-y: auto;
             }
             h1 {
                 font-size: 1.3em;
